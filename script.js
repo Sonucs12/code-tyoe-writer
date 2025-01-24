@@ -47,10 +47,6 @@ function typeNextChar() {
             typewriterElement.textContent += char;
         }
 
-        if (currentBlock.tag === "html" || currentBlock.tag === "css" || currentBlock.tag === "js") {
-            typewriterElement.className = `language-${currentBlock.tag}`;
-            Prism.highlightElement(typewriterElement);
-        }
     // Update live preview
 if (currentBlock.tag === "html") {
     livePreviewElement.innerHTML = typewriterElement.textContent;
