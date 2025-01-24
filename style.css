@@ -1,48 +1,65 @@
 body {
   overflow-x: hidden;
+overflow-y: hidden;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 ::-webkit-scrollbar {
-  width: 5px; 
-  height: 8px; 
+  width: 5px;
+  height: 8px;
 }
-
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; 
-  border-radius: 10px; 
+  background: #f1f1f1;
+  border-radius: 10px;
 }
-
 
 ::-webkit-scrollbar-thumb {
-  background: #888; 
-  border-radius: 10px; 
+  background: #888;
+  border-radius: 10px;
 }
-
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: #555;
 }
-
 
 ::-webkit-scrollbar-corner {
-  background: #f1f1f1; 
+  background: #f1f1f1;
 }
-#htmlInput,#cssInput,#jsInput {
+
+.container-fluid {
+  display: block;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+#htmlInput,
+#cssInput,
+#jsInput {
   min-height: 100px;
-  max-height: 500px; 
-  resize: vertical;  
-  overflow: auto;   
+  max-height: 500px;
+  resize: vertical;
+  overflow: auto;
 }
 
 #recordingSection {
+  position: absolute;
+  right: 0;
+overflow-y: auto;
+  width: calc(100% - 25%);
   transition: all 0.3s ease-in-out;
   height: 100vh;
-
   background-color: #f8f9fa;
+  z-index: 10;
 }
 
 #dashboard {
+  width: 25%;
+  position: relative;
+  left: 0;
   transition: all 0.3s ease-in-out;
   height: 100vh;
   overflow-y: auto;
@@ -50,7 +67,7 @@ body {
 }
 
 #typewriter {
-width: 500px;
+  width: 500px;
   white-space: pre-wrap;
   overflow-y: auto;
   overflow-x: auto;
@@ -60,47 +77,142 @@ width: 500px;
   background-color: #ffffff;
   font-family: "Courier New", Courier, monospace;
   font-size: 20px;
- padding: 30px;
- padding-bottom: 50px;
- scroll-behavior: smooth;
+  padding: 30px;
+  padding-bottom: 50px;
+  scroll-behavior: smooth;
 }
+
 #livePreview {
+  margin-top: 3.5rem;
   width: 500px;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  display: block; /* Change this line */
+  display: flex;
   align-items: center;
   justify-content: center;
   overflow-y: auto;
   overflow-x: hidden;
   background-color: #f1f1f1;
-  min-height: 200px;
-  height: 250px;
+  min-height: 150px;
+  max-height: 250px;
   font-family: Arial, sans-serif;
-  scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
-#toggleDashboard {
-  z-index: 10;
-}
-
-
-.hidden-dashboard #dashboard {
+.recording-nav {
   display: none;
 }
 
+.hidden-dashboard .recording-nav {
+  display: flex;
+}
+
+.hidden-dashboard #dashboard {
+  /* transform: translateX(-100%); */
+
+  transition: all 0.3s ease-in-out;
+}
+.hidden-dashboard #livePreview {
+margin-top: 0;
+}
 .hidden-dashboard #recordingSection {
   width: 100%;
+ 
+  z-index: 15;
 }
+
 #cursor {
   font-weight: bold;
-  color: #00ff00;  /* Change cursor color */
+  color: #00ff00;
   margin-left: 3px;
   animation: blink 0.7s step-end infinite;
 }
 
+.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.dark-mode #dashboard {
+  background-color: #1e1e1e;
+}
+
+.dark-mode #recordingSection {
+  background-color: black;
+}
+
+.dark-mode #typewriter {
+  background-color: #2c2c2c;
+  color: #ffffff;
+}
+
+.dark-mode #livePreview {
+  background-color: #1f1f1f;
+}
+
+.dark-mode textarea {
+  background-color: #2c2c2c;
+  color: #ffffff;
+}
+
+.dark-mode textarea::placeholder {
+  color: #838080;
+}
+
+.dark-mode input {
+  background-color: #2c2c2c;
+  color: #ffffff;
+}
+
+.dark-mode input::placeholder {
+  color: #838080;
+}
+
+.dark-mode input:focus {
+  border-color: #00ff00;
+  background-color: #2c2c2c;
+  color: #ffffff;
+}
+
+.dark-mode input:active {
+  border-color: #00ff00;
+  background-color: #2c2c2c;
+  color: #ffffff;
+}
+
+.dark-mode #cursor {
+  color: #00ff00;
+}
+
+.dark-mode #htmlInput,
+.dark-mode #cssInput,
+.dark-mode #jsInput {
+  background-color: #2c2c2c;
+  color: #ffffff;
+}
+
+.dark-mode #toggleDashboard {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+.dark-mode #toggleDashboard:hover {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+.dark-mode #toggleDashboard:active {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+.dark-mode #toggleDashboard:focus {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
 @keyframes blink {
   50% {
-      opacity: 0;
+    opacity: 0;
   }
 }

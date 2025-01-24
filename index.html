@@ -8,131 +8,147 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <div class="container-fluid">
-      <div class="row">
-        <!-- Dashboard -->
-        <div id="dashboard" class="col-lg-3 col-md-4 col-sm-12 p-3 border-end">
-          <h4 class="text-center">Dashboard</h4>
-          <div class="form-group mb-3">
-            <label for="htmlInput">HTML Code</label>
-            <textarea
-              id="htmlInput"
-              class="form-control"
-              rows="6"
-              placeholder="Enter HTML code here..."
-            ></textarea>
+    <section class="d-flex flex-row">
+      <!-- Dashboard -->
+      <div id="dashboard" class="col-lg-3 col-md-4 col-sm-12 p-3 border-end">
+        <nav class="navbar navbar-dark">
+          <div class="container-fluid nav-cont">
+            <button class="btn btn-primary toggleDashboard cursor-pointer">
+              <i class="bi bi-list"></i>
+            </button>
+            <div class="form-check form-switch">
+              <label for="darkMode" class="form-check-label"
+                ><i class="bi bi-brightness-high-fill "></i></label
+              ><input type="checkbox" class="form-check-input darkMode " />
+            </div>
           </div>
-          <div class="form-group mb-3">
-            <label for="cssInput">CSS Code</label>
-            <textarea
-              id="cssInput"
-              class="form-control"
-              rows="6"
-              placeholder="Enter CSS code here..."
-            ></textarea>
-          </div>
-          <div class="form-group mb-3">
-            <label for="jsInput">JavaScript Code</label>
-            <textarea
-              id="jsInput"
-              class="form-control"
-              rows="6"
-              placeholder="Enter JavaScript code here..."
-            ></textarea>
-          </div>
-          <div class="form-group mb-3">
-            <label for="fontControl">Adjust Font</label>
-            <input
-              type="range"
-              id="fontControl"
-              class="form-range"
-              min="16"
-              max="50"
-              value="20"
-            />
-          </div>
-          <div class="form-group mb-3">
-            <label for="widthControl">Adjust Width</label>
-            <input
-              type="range"
-              id="widthControl"
-              class="form-range"
-              min="200"
-              max="800"
-              value="200"
-            />
-          </div>
-          <div class="form-group mb-3">
-            <label for="realTimeSpeed">Real-Time Typing Speed</label>
-            <input
-              type="range"
-              id="realTimeSpeed"
-              class="form-range"
-              min="50"
-              max="800"
-              value="100"
-            />
-          </div>
+        </nav>
+        <h4 class="text-center">Dashboard</h4>
 
-          <div class="form-group mb-3">
-            <label for="typingSpeed">Typewriter Speed (ms)</label>
-            <input
-              type="number"
-              id="typingSpeed"
-              class="form-control"
-              value="100"
-            />
-          </div>
-          <div class="form-group mb-3">
-            <label for="codeSwitchDelay">Delay Between Code (ms)</label>
-            <input
-              type="number"
-              id="codeSwitchDelay"
-              class="form-control"
-              value="500"
-            />
-          </div>
-          <div class="form-group mb-3">
-            <label for="bgColor">Recording Background</label>
-            <input
-              type="color"
-              id="bgColor"
-              class="form-control form-control-color"
-            />
-          </div>
-          <div class="text-center">
-            <button id="startBtn" class="btn btn-success w-100 mb-2">
-              Start Writing
-            </button>
-            <button id="stopBtn" class="btn btn-danger w-100">
-              Stop Writing
-            </button>
-          </div>
+        <div class="form-group mb-3">
+          <label for="htmlInput">HTML Code</label>
+          <textarea
+            id="htmlInput"
+            class="form-control"
+            rows="6"
+            placeholder="Enter HTML code here..."
+          ></textarea>
+        </div>
+        <div class="form-group mb-3">
+          <label for="cssInput">CSS Code</label>
+          <textarea
+            id="cssInput"
+            class="form-control"
+            rows="6"
+            placeholder="Enter CSS code here..."
+          ></textarea>
+        </div>
+        <div class="form-group mb-3">
+          <label for="jsInput">JavaScript Code</label>
+          <textarea
+            id="jsInput"
+            class="form-control"
+            rows="6"
+            placeholder="Enter JavaScript code here..."
+          ></textarea>
+        </div>
+        <div class="form-group mb-3">
+          <label for="fontControl">Adjust Font</label>
+          <input
+            type="range"
+            id="fontControl"
+            class="form-range"
+            min="16"
+            max="50"
+            value="20"
+          />
+        </div>
+        <div class="form-group mb-3">
+          <label for="widthControl">Adjust Width</label>
+          <input
+            type="range"
+            id="widthControl"
+            class="form-range"
+            min="200"
+            max="800"
+            value="200"
+          />
+        </div>
+        <div class="form-group mb-3">
+          <label for="realTimeSpeed">Real-Time Typing Speed</label>
+          <input
+            type="range"
+            id="realTimeSpeed"
+            class="form-range"
+            min="50"
+            max="800"
+            value="100"
+          />
         </div>
 
-        <!-- Recording Section -->
-        <div
-          id="recordingSection"
-          class="col-lg-9 col-md-8 col-sm-12 d-flex flex-column align-items-center justify-content-center"
-        >
-          <div id="livePreview" class="p-3 mb-3 border rounded"></div>
-          <div id="typewriter" class="p-3 border rounded typewriter">
-            <span id="cursor">|</span>
-          </div>
+        <div class="form-group mb-3">
+          <label for="typingSpeed">Typewriter Speed (ms)</label>
+          <input
+            type="number"
+            id="typingSpeed"
+            class="form-control"
+            value="100"
+          />
+        </div>
+        <div class="form-group mb-3">
+          <label for="codeSwitchDelay">Delay Between Code (ms)</label>
+          <input
+            type="number"
+            id="codeSwitchDelay"
+            class="form-control"
+            value="500"
+          />
+        </div>
+        <div class="form-group mb-3 d-flex align-items-center justify-content-between">
+          <label for="bgColor">Background Color</label>
+          <input
+            type="color"
+            id="bgColor"
+            class="form-control form-control-color"
+          />
+        </div>
+
+        <div class="text-center">
+          <button id="startBtn" class="btn btn-success w-100 mb-2">
+            Start Writing
+          </button>
+          <button id="stopBtn" class="btn btn-danger w-100">
+            Stop Writing
+          </button>
         </div>
       </div>
-      <button
-        id="toggleDashboard"
-        class="btn btn-primary position-fixed top-0 end-0 m-3"
-      >
-        <i class="bi bi-list"></i>
-      </button>
-    </div>
-    <video id="playbackVideo" controls style="display: none"></video>
+
+      <!-- Recording Section -->
+      <div id="recordingSection" class="d-flex flex-column align-items-center">
+        <nav class="recording-nav navbar navbar-dark p-4 w-100">
+          <button class="btn btn-primary toggleDashboard cursor-pointer">
+            <i class="bi bi-list"></i>
+          </button>
+          <div class="form-check form-switch ">
+            <label for="darkMode" class="form-check-label cursor-pointer"
+              ><i class="bi bi-brightness-high-fill"></i></label
+            ><input type="checkbox"  class="form-check-input darkMode" />
+          </div>
+        </nav>
+        <div id="livePreview" class="p-3 mb-3 border rounded"></div>
+        <div id="typewriter" class="p-3 border rounded typewriter">
+          <span id="cursor">|</span>
+        </div>
+      </div>
+    </section>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
