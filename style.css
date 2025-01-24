@@ -5,12 +5,12 @@ overflow-y: hidden;
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 3px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
   border-radius: 10px;
 }
 
@@ -27,9 +27,7 @@ overflow-y: hidden;
   background: #f1f1f1;
 }
 
-.container-fluid {
-  display: block;
-}
+
 
 .row {
   display: flex;
@@ -44,7 +42,39 @@ overflow-y: hidden;
   resize: vertical;
   overflow: auto;
 }
+.settingBtn:focus{
+  outline: none;
+  background-color: red;
+}
 
+.setting-dashboard{
+  position: absolute;
+  left: -400px;
+  width: 25%;
+ top: 5.5rem;
+ height: 100vh;
+  transition: left 0.4s ease-in-out;
+ 
+  overflow-y: auto;
+  background-color: #e9ecef;
+}
+
+.setting-dashboard.show {
+  left: 0; 
+}
+
+#dashboard {
+  width: 25%;
+ 
+  left: 0;
+  transition: all 0.3s ease-in-out;
+  height: 100vh;
+  overflow-y: auto;
+  background-color: #e9ecef;
+}
+.dashboard-hidden #dashboard{
+  overflow: hidden;
+}
 #recordingSection {
   position: absolute;
   right: 0;
@@ -55,17 +85,9 @@ overflow-y: auto;
   background-color: #f8f9fa;
   z-index: 10;
 }
-
-#dashboard {
-  width: 25%;
-  position: relative;
-  left: 0;
-  transition: all 0.3s ease-in-out;
-  height: 100vh;
-  overflow-y: auto;
-  background-color: #e9ecef;
+#typewriter::-webkit-scrollbar, #livePreview::-webkit-scrollbar {
+  display: none;
 }
-
 #typewriter {
   width: 500px;
   white-space: pre-wrap;
@@ -79,18 +101,25 @@ overflow-y: auto;
   font-family: "Courier New", Courier, monospace;
   font-size: 20px;
   padding: 30px;
+ 
   padding-bottom: 50px;
   scroll-behavior: smooth;
 }
-
+#typewriter.addWordWrap {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  overflow-x: hidden;
+}
 #livePreview {
   margin-top: 3.5rem;
   width: 500px;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+ text-align: center;
+ vertical-align: middle;
+ 
+padding: 20px 20px 30px 20px;
+ 
   overflow-y: auto;
   overflow-x: hidden;
   background-color: #f1f1f1;
@@ -109,7 +138,7 @@ overflow-y: auto;
 }
 
 .hidden-dashboard #dashboard {
-  /* transform: translateX(-100%); */
+ 
 
   transition: all 0.3s ease-in-out;
 }
@@ -129,6 +158,33 @@ margin-top: 0;
   animation: blink 0.7s step-end infinite;
 }
 
+.color{
+display: flex;
+justify-content: flex-start;
+align-items: center;
+padding: 0px 0px 0px 10px;
+gap: 10px;
+
+background-color: black;
+height: 20px;
+}
+.circle{
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+}
+.red{
+  background-color: red;
+}
+.green{
+  background-color: green;
+}
+.yellow{
+  background-color: yellow;
+}
+.currentCode{
+  font-size: 12px;
+}
 .dark-mode {
   background-color: #121212;
   color: #ffffff;
@@ -137,7 +193,9 @@ margin-top: 0;
 .dark-mode #dashboard {
   background-color: #1e1e1e;
 }
-
+.dark-mode .setting-dashboard{
+  background-color: #1e1e1e;
+}
 .dark-mode #recordingSection {
   background-color: black;
 }
@@ -148,7 +206,7 @@ margin-top: 0;
 }
 
 .dark-mode #livePreview {
-  background-color: #1f1f1f;
+  background-color: transparent;
 }
 
 .dark-mode textarea {

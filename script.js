@@ -56,26 +56,28 @@ function typeNextChar() {
 
     // Update live preview
     if (currentBlock.tag === "html") {
+      document.querySelector(".currentCode").textContent = "HTML";
       livePreviewElement.innerHTML = typewriterElement.textContent;
-      livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
-      livePreviewElement.scrollLeft = livePreviewElement.scrollWidth;
-      livePreviewElement.scrollRight = livePreviewElement.scrollWidth;
+      livePreviewElement.scrollTop = livePreviewElement.scrollHeight; 
+     
     } else if (currentBlock.tag === "css") {
+      document.querySelector(".currentCode").textContent = "CSS";
       styleElement.textContent += char;
       livePreviewElement.innerHTML = document.getElementById("htmlInput").value;
       livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
-      livePreviewElement.scrollLeft = livePreviewElement.scrollWidth;
+      
     } else if (currentBlock.tag === "js") {
+      document.querySelector(".currentCode").textContent = "JavaScript";
       livePreviewElement.innerHTML = document.getElementById("htmlInput").value;
       const script = document.createElement("script");
       script.textContent = currentBlock.code.join("\n");
       livePreviewElement.appendChild(script);
       livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
-      livePreviewElement.scrollLeft = livePreviewElement.scrollWidth;
+     
     }
 
     typewriterElement.scrollTo(
-      typewriterElement.scrollWidth - typewriterElement.clientWidth,
+      0,
       typewriterElement.scrollHeight
     );
 
@@ -151,9 +153,6 @@ function toggleTyping() {
   }
 }
 
-// function toggleDashboard() {
-//     document.body.classList.toggle("hidden-dashboard");
-// }
 
 function updateBackground() {
   const color = document.getElementById("bgColor").value;
@@ -219,4 +218,16 @@ function toggleDarkMode() {
   
   
   loadDarkModeState();
+
+
+  document.querySelector(".settingBtn").addEventListener("click", () => {
+    const settingDashboard = document.querySelector(".setting-dashboard");
+    settingDashboard.classList.toggle("show");
+  document.body.classList.toggle("dashboard-hidden");
+  });
+  
+  document.querySelector(".enableWordWrap").addEventListener("change", (e) => {
+    const typewriter = document.getElementById("typewriter");
+    typewriter.classList.toggle("addWordWrap");
+  });
   
