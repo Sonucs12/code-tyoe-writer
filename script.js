@@ -58,14 +58,12 @@ function typeNextChar() {
     if (currentBlock.tag === "html") {
       document.querySelector(".currentCode").textContent = "HTML";
       livePreviewElement.innerHTML = typewriterElement.textContent;
-      livePreviewElement.scrollTop = livePreviewElement.scrollHeight; 
-     
+      livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
     } else if (currentBlock.tag === "css") {
       document.querySelector(".currentCode").textContent = "CSS";
       styleElement.textContent += char;
       livePreviewElement.innerHTML = document.getElementById("htmlInput").value;
       livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
-      
     } else if (currentBlock.tag === "js") {
       document.querySelector(".currentCode").textContent = "JavaScript";
       livePreviewElement.innerHTML = document.getElementById("htmlInput").value;
@@ -73,13 +71,9 @@ function typeNextChar() {
       script.textContent = currentBlock.code.join("\n");
       livePreviewElement.appendChild(script);
       livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
-     
     }
 
-    typewriterElement.scrollTo(
-      0,
-      typewriterElement.scrollHeight
-    );
+    typewriterElement.scrollTo(0, typewriterElement.scrollHeight);
 
     typewriterContext.currentCharIndex++;
     typingInterval = setTimeout(typeNextChar, typeSpeed);
@@ -153,7 +147,6 @@ function toggleTyping() {
   }
 }
 
-
 function updateBackground() {
   const color = document.getElementById("bgColor").value;
   document.getElementById("recordingSection").style.backgroundColor = color;
@@ -175,59 +168,62 @@ function updateFont() {
   document.getElementById("typewriter").style.fontSize = font + "px";
 }
 
-function toggleDashboard() {
-  document.body.classList.toggle("hidden-dashboard");
+
+function toggleClass(targetSelector, className, condition = null) {
+  const target = document.querySelector(targetSelector);
+  if (!target) return;
+
+  
+  if (condition !== null) {
+    target.classList.toggle(className, condition);
+  } else {
+    target.classList.toggle(className);
+  }
 }
 
-
-
-document.querySelectorAll(".toggleDashboard").forEach(function (toggle) {
-  toggle.addEventListener("click", toggleDashboard);
+// Add event listeners using the generic function
+document.querySelectorAll(".toggleDashboard").forEach((toggle) => {
+  toggle.addEventListener("click", () => toggleClass("body", "hidden-dashboard"));
 });
+
+document.querySelector(".settingBtn").addEventListener("click", () => {
+  toggleClass(".setting-dashboard", "show");
+  toggleClass("body", "dashboard-hidden");
+});
+
+document.querySelector(".enableWordWrap").addEventListener("change", (e) => {
+  toggleClass("#typewriter", "removeWordWrap", e.target.checked);
+});
+
+document.querySelector(".addBorder").addEventListener("change", (e) => {
+  toggleClass("#livePreview", "adding-border", e.target.checked);
+});
+
+// Dark mode toggle
 function toggleDarkMode() {
-    document.body.classList.toggle("dark-mode");
-  
-    const isDarkMode = document.body.classList.contains("dark-mode");
-    localStorage.setItem("darkMode", isDarkMode);
-  
-    const darkModeToggles = document.querySelectorAll(".darkMode");
-    darkModeToggles.forEach((toggle) => {
-      toggle.checked = isDarkMode;
-    });
-  }
-  
-  function loadDarkModeState() {
-    const isDarkMode = localStorage.getItem("darkMode") === "true";
-  
-    if (isDarkMode) {
-      document.body.classList.add("dark-mode");
-    } else {
-      document.body.classList.remove("dark-mode");
-    }
-  
-    const darkModeToggles = document.querySelectorAll(".darkMode");
-    darkModeToggles.forEach((toggle) => {
-      toggle.checked = isDarkMode;
-    });
-  }
-  
+  toggleClass("body", "dark-mode");
+
+  const isDarkMode = document.body.classList.contains("dark-mode");
+  localStorage.setItem("darkMode", isDarkMode);
 
   document.querySelectorAll(".darkMode").forEach((toggle) => {
-    toggle.addEventListener("change", toggleDarkMode);
+    toggle.checked = isDarkMode;
   });
-  
-  
-  loadDarkModeState();
+}
 
+// Load dark mode state
+function loadDarkModeState() {
+  const isDarkMode = localStorage.getItem("darkMode") === "true";
+  toggleClass("body", "dark-mode", isDarkMode);
 
-  document.querySelector(".settingBtn").addEventListener("click", () => {
-    const settingDashboard = document.querySelector(".setting-dashboard");
-    settingDashboard.classList.toggle("show");
-  document.body.classList.toggle("dashboard-hidden");
+  document.querySelectorAll(".darkMode").forEach((toggle) => {
+    toggle.checked = isDarkMode;
   });
-  
-  document.querySelector(".enableWordWrap").addEventListener("change", (e) => {
-    const typewriter = document.getElementById("typewriter");
-    typewriter.classList.toggle("addWordWrap");
-  });
-  
+}
+
+document.querySelectorAll(".darkMode").forEach((toggle) => {
+  toggle.addEventListener("change", toggleDarkMode);
+});
+
+loadDarkModeState();
+

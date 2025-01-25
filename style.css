@@ -1,12 +1,12 @@
 body {
   overflow-x: hidden;
-overflow-y: hidden;
+  overflow-y: hidden;
   transition: background-color 0.3s, color 0.3s;
 }
 
 ::-webkit-scrollbar {
   width: 3px;
-  height: 8px;
+  height: 3px;
 }
 
 ::-webkit-scrollbar-track {
@@ -17,6 +17,7 @@ overflow-y: hidden;
 ::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 10px;
+  cursor: pointer;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -26,8 +27,6 @@ overflow-y: hidden;
 ::-webkit-scrollbar-corner {
   background: #f1f1f1;
 }
-
-
 
 .row {
   display: flex;
@@ -42,57 +41,60 @@ overflow-y: hidden;
   resize: vertical;
   overflow: auto;
 }
-.settingBtn:focus{
+.settingBtn:focus {
   outline: none;
   background-color: red;
 }
 
-.setting-dashboard{
+.setting-dashboard {
   position: absolute;
   left: -400px;
   width: 25%;
- top: 5.5rem;
- height: 100vh;
+  top: 5.5rem;
+  height: 100vh;
   transition: left 0.4s ease-in-out;
- 
+
   overflow-y: auto;
   background-color: #e9ecef;
 }
 
 .setting-dashboard.show {
-  left: 0; 
+  left: 0;
 }
 
 #dashboard {
   width: 25%;
- 
+
   left: 0;
   transition: all 0.3s ease-in-out;
   height: 100vh;
   overflow-y: auto;
   background-color: #e9ecef;
 }
-.dashboard-hidden #dashboard{
+.dashboard-hidden #dashboard {
   overflow: hidden;
 }
 #recordingSection {
   position: absolute;
   right: 0;
-overflow-y: auto;
+  overflow-y: auto;
   width: calc(100% - 25%);
   transition: all 0.3s ease-in-out;
   height: 100vh;
   background-color: #f8f9fa;
   z-index: 10;
 }
-#typewriter::-webkit-scrollbar, #livePreview::-webkit-scrollbar {
+#typewriter::-webkit-scrollbar,
+#livePreview::-webkit-scrollbar {
   display: none;
 }
 #typewriter {
   width: 500px;
   white-space: pre-wrap;
+  overflow-wrap: break-word;
   overflow-y: auto;
-  overflow-x: auto;
+  overflow-x: hidden;
+
   min-height: 200px;
   max-height: 300px;
   color: black;
@@ -101,25 +103,27 @@ overflow-y: auto;
   font-family: "Courier New", Courier, monospace;
   font-size: 20px;
   padding: 30px;
- 
+
   padding-bottom: 50px;
   scroll-behavior: smooth;
 }
-#typewriter.addWordWrap {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  overflow-x: hidden;
+#typewriter.removeWordWrap {
+  overflow-wrap: normal;
+  overflow-x: auto;
+}
+#typewriter.removeWordWrap::-webkit-scrollbar {
+  display: inline;
 }
 #livePreview {
   margin-top: 3.5rem;
   width: 500px;
   word-wrap: break-word;
   overflow-wrap: break-word;
- text-align: center;
- vertical-align: middle;
- 
-padding: 20px 20px 30px 20px;
- 
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid white;
+  padding: 20px 20px 30px 20px;
+
   overflow-y: auto;
   overflow-x: hidden;
   background-color: #f1f1f1;
@@ -128,7 +132,13 @@ padding: 20px 20px 30px 20px;
   font-family: Arial, sans-serif;
   scroll-behavior: smooth;
 }
-
+#livePreview.adding-border {
+  border: none;
+  background-color: transparent;
+}
+.dark-mode #livePreview.adding-border {
+  background-color: transparent;
+}
 .recording-nav {
   display: none;
 }
@@ -138,16 +148,14 @@ padding: 20px 20px 30px 20px;
 }
 
 .hidden-dashboard #dashboard {
- 
-
   transition: all 0.3s ease-in-out;
 }
 .hidden-dashboard #livePreview {
-margin-top: 0;
+  margin-top: 0;
 }
 .hidden-dashboard #recordingSection {
   width: 100%;
- 
+
   z-index: 15;
 }
 
@@ -158,31 +166,32 @@ margin-top: 0;
   animation: blink 0.7s step-end infinite;
 }
 
-.color{
-display: flex;
-justify-content: flex-start;
-align-items: center;
-padding: 0px 0px 0px 10px;
-gap: 10px;
+.color {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0px 0px 0px 10px;
+  gap: 10px;
 
-background-color: black;
-height: 20px;
+  background-color: black;
+  height: 20px;
 }
-.circle{
+.circle {
   border-radius: 50%;
   width: 12px;
   height: 12px;
 }
-.red{
+.red {
   background-color: red;
 }
-.green{
+.green {
   background-color: green;
 }
-.yellow{
+.yellow {
   background-color: yellow;
 }
-.currentCode{
+.currentCode {
+  color: white;
   font-size: 12px;
 }
 .dark-mode {
@@ -193,7 +202,7 @@ height: 20px;
 .dark-mode #dashboard {
   background-color: #1e1e1e;
 }
-.dark-mode .setting-dashboard{
+.dark-mode .setting-dashboard {
   background-color: #1e1e1e;
 }
 .dark-mode #recordingSection {
@@ -206,7 +215,7 @@ height: 20px;
 }
 
 .dark-mode #livePreview {
-  background-color: transparent;
+  background-color: #2c2c2c;
 }
 
 .dark-mode textarea {
