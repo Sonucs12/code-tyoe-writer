@@ -13,12 +13,27 @@ document.getElementById("widthControl").addEventListener("input", updateWidth);
 document.getElementById("fontControl").addEventListener("input", updateFont);
 document.getElementById("startBtn").addEventListener("click", startTyping);
 document.getElementById("stopBtn").addEventListener("click", toggleTyping);
-
 document.getElementById("bgColor").addEventListener("input", updateBackground);
+
+// Check if content exists in the input fields initially
+function checkContent() {
+  const htmlContent = document.getElementById("htmlInput").value.trim();
+  const cssContent = document.getElementById("cssInput").value.trim();
+  const jsContent = document.getElementById("jsInput").value.trim();
+  document.getElementById("startBtn").disabled = !(
+    htmlContent ||
+    cssContent ||
+    jsContent
+  );
+}
+
+document.getElementById("htmlInput").addEventListener("input", checkContent);
+document.getElementById("cssInput").addEventListener("input", checkContent);
+document.getElementById("jsInput").addEventListener("input", checkContent);
+checkContent();
 
 function typeNextChar() {
   if (!typewriterContext || paused) return;
-
   const {
     allCode,
     currentBlockIndex,
@@ -33,20 +48,22 @@ function typeNextChar() {
   const currentBlock = allCode[currentBlockIndex];
   if (!currentBlock) {
     isTyping = false;
+
+    const toggleButton = document.getElementById("stopBtn");
+    toggleButton.disabled = true;
+    toggleButton.textContent = "Pause";
     return;
   }
 
   const currentLine = currentBlock.code[currentLineIndex] || "";
   if (currentCharIndex < currentLine.length) {
     const char = currentLine[currentCharIndex];
-
     if (currentLine.trim() === "(delay)") {
       typewriterContext.currentLineIndex++;
       typewriterContext.currentCharIndex = 0;
       typingInterval = setTimeout(typeNextChar, codeSwitchDelay);
       return;
     }
-
     if (currentCharIndex === 0) {
       typewriterElement.textContent +=
         "\n" + currentLine.slice(0, currentCharIndex + 1);
@@ -74,7 +91,6 @@ function typeNextChar() {
     }
 
     typewriterElement.scrollTo(0, typewriterElement.scrollHeight);
-
     typewriterContext.currentCharIndex++;
     typingInterval = setTimeout(typeNextChar, typeSpeed);
   } else {
@@ -86,17 +102,16 @@ function typeNextChar() {
     }
     typingInterval = setTimeout(typeNextChar, typeSpeed);
   }
+  toggleAutomaticHideOnTypingEnd();
 }
 
 function startTyping() {
   if (isTyping) return;
   isTyping = true;
   paused = false;
-
   const htmlCode = document.getElementById("htmlInput").value.split("\n");
   const cssCode = document.getElementById("cssInput").value.split("\n");
   const jsCode = document.getElementById("jsInput").value.split("\n");
-
   const codeSwitchDelay = parseInt(
     document.getElementById("codeSwitchDelay").value,
     10
@@ -104,7 +119,6 @@ function startTyping() {
 
   const typewriterElement = document.getElementById("typewriter");
   const livePreviewElement = document.getElementById("livePreview");
-
   typewriterElement.textContent = "";
   livePreviewElement.innerHTML = "";
 
@@ -126,12 +140,16 @@ function startTyping() {
   };
 
   document.head.appendChild(typewriterContext.styleElement);
+  const toggleButton = document.getElementById("stopBtn");
+  toggleButton.disabled = false;
   typeNextChar();
 }
 
 function toggleTyping() {
   const toggleButton = document.getElementById("stopBtn");
+
   if (isTyping) {
+    toggleButton.disabled = false;
     if (paused) {
       paused = false;
       toggleButton.textContent = "Pause";
@@ -141,11 +159,9 @@ function toggleTyping() {
       toggleButton.textContent = "Resume";
       clearTimeout(typingInterval);
     }
-  } else {
-    startTyping();
-    toggleButton.textContent = "Pause";
   }
 }
+document.getElementById("stopBtn").disabled = true;
 
 function updateBackground() {
   const color = document.getElementById("bgColor").value;
@@ -168,12 +184,9 @@ function updateFont() {
   document.getElementById("typewriter").style.fontSize = font + "px";
 }
 
-
 function toggleClass(targetSelector, className, condition = null) {
   const target = document.querySelector(targetSelector);
   if (!target) return;
-
-  
   if (condition !== null) {
     target.classList.toggle(className, condition);
   } else {
@@ -181,9 +194,45 @@ function toggleClass(targetSelector, className, condition = null) {
   }
 }
 
-// Add event listeners using the generic function
+function toggleAutomaticHideOnTypingEnd() {
+  if (!typewriterContext) return;
+  const checkbox = document.querySelector(".hideTypeWriter");
+  if (!checkbox) {
+    console.error("Checkbox with class '.hideTypeWriter' not found");
+    return;
+  }
+
+  if (!checkbox.checked) {
+    console.log("Checkbox is unchecked, skipping automatic hide");
+    return;
+  }
+  const { allCode, currentBlockIndex } = typewriterContext;
+  const currentBlock = allCode[currentBlockIndex];
+  if (!currentBlock && !paused) {
+    console.log("Typing ended, running automatic hide");
+    setTimeout(() => {
+      toggleClass("#recordingSection", "automaticHide", true);
+    }, 1000);
+    setTimeout(() => {
+      toggleClass("#recordingSection", "automaticHide", false);
+    }, 5000);
+  }
+}
+
+document.querySelector(".hideTypeWriter").addEventListener("change", (e) => {
+  const isChecked = e.target.checked;
+  if (!isChecked) {
+    toggleClass("#recordingSection", "automaticHide", false);
+  }
+});
+
+document.querySelector(".hidetypingbox").addEventListener("change", (e) => {
+  toggleClass("#recordingSection", "automaticHide", e.target.checked);
+});
 document.querySelectorAll(".toggleDashboard").forEach((toggle) => {
-  toggle.addEventListener("click", () => toggleClass("body", "hidden-dashboard"));
+  toggle.addEventListener("click", () =>
+    toggleClass("body", "hidden-dashboard")
+  );
 });
 
 document.querySelector(".settingBtn").addEventListener("click", () => {
@@ -199,7 +248,6 @@ document.querySelector(".addBorder").addEventListener("change", (e) => {
   toggleClass("#livePreview", "adding-border", e.target.checked);
 });
 
-// Dark mode toggle
 function toggleDarkMode() {
   toggleClass("body", "dark-mode");
 
@@ -226,4 +274,3 @@ document.querySelectorAll(".darkMode").forEach((toggle) => {
 });
 
 loadDarkModeState();
-

@@ -41,6 +41,7 @@ body {
   resize: vertical;
   overflow: auto;
 }
+
 .settingBtn:focus {
   outline: none;
   background-color: red;
@@ -71,9 +72,11 @@ body {
   overflow-y: auto;
   background-color: #e9ecef;
 }
+
 .dashboard-hidden #dashboard {
   overflow: hidden;
 }
+
 #recordingSection {
   position: absolute;
   right: 0;
@@ -84,10 +87,12 @@ body {
   background-color: #f8f9fa;
   z-index: 10;
 }
+
 #typewriter::-webkit-scrollbar,
 #livePreview::-webkit-scrollbar {
   display: none;
 }
+
 #typewriter {
   width: 500px;
   white-space: pre-wrap;
@@ -96,7 +101,7 @@ body {
   overflow-x: hidden;
 
   min-height: 200px;
-  max-height: 300px;
+  max-height: 250px;
   color: black;
   font-weight: 800;
   background-color: #ffffff;
@@ -107,15 +112,18 @@ body {
   padding-bottom: 50px;
   scroll-behavior: smooth;
 }
+
 #typewriter.removeWordWrap {
   overflow-wrap: normal;
   overflow-x: auto;
 }
+
 #typewriter.removeWordWrap::-webkit-scrollbar {
   display: inline;
 }
+
 #livePreview {
-  margin-top: 3.5rem;
+  margin-top: 2rem;
   width: 500px;
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -123,22 +131,26 @@ body {
   vertical-align: middle;
   border: 1px solid white;
   padding: 20px 20px 30px 20px;
-
+  transition: height 0.5s ease-in-out;
   overflow-y: auto;
   overflow-x: hidden;
   background-color: #f1f1f1;
-  min-height: 150px;
-  max-height: 400px;
+  height: 35vh;
+
+  max-height: 80vh;
   font-family: Arial, sans-serif;
   scroll-behavior: smooth;
 }
+
 #livePreview.adding-border {
   border: none;
   background-color: transparent;
 }
+
 .dark-mode #livePreview.adding-border {
   background-color: transparent;
 }
+
 .recording-nav {
   display: none;
 }
@@ -150,9 +162,11 @@ body {
 .hidden-dashboard #dashboard {
   transition: all 0.3s ease-in-out;
 }
+
 .hidden-dashboard #livePreview {
   margin-top: 0;
 }
+
 .hidden-dashboard #recordingSection {
   width: 100%;
 
@@ -166,34 +180,57 @@ body {
   animation: blink 0.7s step-end infinite;
 }
 
+.automaticHide .iphone {
+  position: relative;
+  scale: 0;
+  bottom: -10rem;
+  display: none;
+}
+
+.automaticHide #livePreview {
+  height: 400px;
+}
+
+.iphone {
+  transition: all 0.4s ease-in-out;
+  bottom: 0;
+}
+
 .color {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   padding: 0px 0px 0px 10px;
-  gap: 10px;
+  gap: 5px;
 
   background-color: black;
   height: 20px;
 }
+
 .circle {
   border-radius: 50%;
   width: 12px;
   height: 12px;
 }
+
 .red {
   background-color: red;
 }
+
 .green {
   background-color: green;
 }
+
 .yellow {
-  background-color: yellow;
+  background-color: rgb(255, 204, 0);
 }
+
 .currentCode {
   color: white;
   font-size: 12px;
+  margin-left: 10px;
 }
+
 .dark-mode {
   background-color: #121212;
   color: #ffffff;
@@ -202,9 +239,11 @@ body {
 .dark-mode #dashboard {
   background-color: #1e1e1e;
 }
+
 .dark-mode .setting-dashboard {
   background-color: #1e1e1e;
 }
+
 .dark-mode #recordingSection {
   background-color: black;
 }
