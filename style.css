@@ -27,7 +27,27 @@ body {
 ::-webkit-scrollbar-corner {
   background: #f1f1f1;
 }
+.form-check-container {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
 
+.form-check-container:hover {
+  background-color: #c4c0c0; 
+}
+.form-check{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.form-check-input {
+width: 40px !important ;
+ height: 20px;
+}
 .row {
   display: flex;
   flex-direction: row;
@@ -235,7 +255,13 @@ body {
   background-color: #121212;
   color: #ffffff;
 }
-
+.dark-mode .form-check-container:hover {
+  background-color: #636060; 
+  
+}
+.dark-mode .form-check-input {
+  background-color: #6c6e6d !important; 
+}
 .dark-mode #dashboard {
   background-color: #1e1e1e;
 }
