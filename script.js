@@ -176,7 +176,7 @@ function updateTypingSpeed() {
 function updateWidth() {
   let width = parseInt(document.getElementById("widthControl").value);
   document.getElementById("livePreview").style.width = width + "px";
-  document.getElementById("typewriter").style.width = width + "px";
+  document.querySelector(".iphone").style.width = width + "px";
 }
 
 function updateFont() {

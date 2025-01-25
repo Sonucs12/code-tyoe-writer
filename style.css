@@ -3,7 +3,9 @@ body {
   overflow-y: hidden;
   transition: background-color 0.3s, color 0.3s;
 }
-
+*{
+  box-sizing: border-box;
+}
 ::-webkit-scrollbar {
   width: 3px;
   height: 3px;
@@ -29,24 +31,31 @@ body {
 }
 .form-check-container {
   display: flex;
+  
   align-items: center;
   padding: 10px;
   border-radius: 5px;
   transition: background-color 0.3s ease;
 }
 
-.form-check-container:hover {
-  background-color: #c4c0c0; 
+.form-check-input {
+  cursor: pointer; 
 }
-.form-check{
+
+
+.form-check-container:hover {
+  background-color: #c4c0c0;
+  
+}
+.form-check {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
 .form-check-input {
-width: 40px !important ;
- height: 20px;
+  width: 40px !important ;
+  height: 20px;
 }
 .row {
   display: flex;
@@ -96,8 +105,17 @@ width: 40px !important ;
 .dashboard-hidden #dashboard {
   overflow: hidden;
 }
+.display-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 30px;
+  transition: all 0.5s;
+}
 
 #recordingSection {
+  
   position: absolute;
   right: 0;
   overflow-y: auto;
@@ -114,23 +132,24 @@ width: 40px !important ;
 }
 
 #typewriter {
-  width: 500px;
+  width: 100%;
   white-space: pre-wrap;
   overflow-wrap: break-word;
   overflow-y: auto;
   overflow-x: hidden;
-
-  min-height: 200px;
-  max-height: 250px;
+  height: 35vh;
+  
+  max-height: 40vh;
   color: black;
   font-weight: 800;
-  background-color: #ffffff;
+  background-color: #f1f1f1;
   font-family: "Courier New", Courier, monospace;
   font-size: 20px;
   padding: 30px;
 
   padding-bottom: 50px;
   scroll-behavior: smooth;
+  transition: height 0.5s ease-in-out;
 }
 
 #typewriter.removeWordWrap {
@@ -145,13 +164,14 @@ width: 40px !important ;
 #livePreview {
   margin-top: 2rem;
   width: 500px;
+  max-width: 800px;
   word-wrap: break-word;
   overflow-wrap: break-word;
   text-align: center;
   vertical-align: middle;
   border: 1px solid white;
   padding: 20px 20px 30px 20px;
-  transition: height 0.5s ease-in-out;
+
   overflow-y: auto;
   overflow-x: hidden;
   background-color: #f1f1f1;
@@ -160,6 +180,7 @@ width: 40px !important ;
   max-height: 80vh;
   font-family: Arial, sans-serif;
   scroll-behavior: smooth;
+  transition: height 0.5s ease-in-out;
 }
 
 #livePreview.adding-border {
@@ -173,12 +194,19 @@ width: 40px !important ;
 
 .recording-nav {
   display: none;
+  position: sticky;
+  top: 0;
 }
 
 .hidden-dashboard .recording-nav {
   display: flex;
 }
-
+.hidden-dashboard .display-section {
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  
+}
 .hidden-dashboard #dashboard {
   transition: all 0.3s ease-in-out;
 }
@@ -189,10 +217,15 @@ width: 40px !important ;
 
 .hidden-dashboard #recordingSection {
   width: 100%;
-
   z-index: 15;
 }
-
+.hidden-dashboard #livePreview,.hidden-dashboard #typewriter{
+max-height:90vh;
+height: 78vh;
+}
+.hidden-dashboard #typewriter{
+  height:calc(78vh - 3.85vh) ;
+}
 #cursor {
   font-weight: bold;
   color: #00ff00;
@@ -201,10 +234,9 @@ width: 40px !important ;
 }
 
 .automaticHide .iphone {
-  position: relative;
+  transform: translateY(10rem);
+  
   scale: 0;
-  bottom: -10rem;
-  display: none;
 }
 
 .automaticHide #livePreview {
@@ -212,8 +244,9 @@ width: 40px !important ;
 }
 
 .iphone {
-  transition: all 0.4s ease-in-out;
-  bottom: 0;
+  width: 500px;
+  transition: transform 0.5s, scale 0.5s;
+  transform: translateY(0);
 }
 
 .color {
@@ -256,11 +289,10 @@ width: 40px !important ;
   color: #ffffff;
 }
 .dark-mode .form-check-container:hover {
-  background-color: #636060; 
-  
+  background-color: #636060;
 }
 .dark-mode .form-check-input {
-  background-color: #6c6e6d !important; 
+  background-color: #6c6e6d !important;
 }
 .dark-mode #dashboard {
   background-color: #1e1e1e;
