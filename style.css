@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Consolas&display=swap');
+
+
+
 body {
   overflow-x: hidden;
   overflow-y: hidden;
@@ -116,7 +120,7 @@ body {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  gap: 30px;
+  gap: 20px;
   transition: all 0.5s;
 }
 
@@ -146,9 +150,10 @@ body {
 min-height: 30vh;
   max-height: 40vh;
   color: black;
-  font-weight: 800;
+  font-weight: 600;
   background-color: #f1f1f1;
-  font-family: "Courier New", Courier, monospace;
+  font-family: Consolas, "Courier New", monospace;
+
   font-size: 20px;
   padding: 30px;
 
@@ -167,7 +172,7 @@ min-height: 30vh;
 }
 
 #livePreview {
- 
+
   width: 500px;
   max-width: 800px;
   word-wrap: break-word;
@@ -181,7 +186,7 @@ min-height: 30vh;
   overflow-x: hidden;
   background-color: #f1f1f1;
 
-  height: 40vh;
+  height: 42vh;
   
   max-height: 80vh;
   font-family: Arial, sans-serif;
@@ -231,11 +236,11 @@ min-height: 30vh;
 .hidden-dashboard #livePreview,
 .hidden-dashboard #typewriter {
   max-height: 90vh;
-  height: 78vh;
+  height: 80vh;
 }
 
 .hidden-dashboard #typewriter {
-  height: calc(78vh - 3.85vh);
+  height: calc(80vh - 3.60vh);
 }
 
 #cursor {
@@ -263,9 +268,10 @@ min-height: 30vh;
 
 .color {
   display: flex;
+  
   justify-content: flex-start;
   align-items: center;
-  padding: 0px 0px 0px 10px;
+  padding: 0px 10px 0px 10px;
   gap: 5px;
 
   background-color: black;
@@ -295,7 +301,19 @@ min-height: 30vh;
   font-size: 12px;
   margin-left: 10px;
 }
-
+#editeditor{
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin-left: auto;
+}
+#editeditor:hover{
+  color: #bcc1bc;
+}
+#editeditor:focus{
+  color: #ff004c;
+}
 .dark-mode {
   background-color: #121212;
   color: #ffffff;

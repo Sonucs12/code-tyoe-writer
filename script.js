@@ -15,6 +15,11 @@ document.getElementById("startBtn").addEventListener("click", startTyping);
 document.getElementById("stopBtn").addEventListener("click", toggleTyping);
 document.getElementById("bgColor").addEventListener("input", updateBackground);
 
+
+
+
+
+
 // Check if content exists in the input fields initially
 function checkContent() {
   const htmlContent = document.getElementById("htmlInput").value.trim();
@@ -31,8 +36,6 @@ document.getElementById("htmlInput").addEventListener("input", checkContent);
 document.getElementById("cssInput").addEventListener("input", checkContent);
 document.getElementById("jsInput").addEventListener("input", checkContent);
 checkContent();
-
-
 
 function typeNextChar() {
   if (!typewriterContext || paused) return;
@@ -75,46 +78,49 @@ function typeNextChar() {
     } else {
       typewriterElement.textContent += char;
     }
-// Update live preview based on the current block type
-const iframeDoc = livePreviewElement.contentDocument || livePreviewElement.contentWindow.document;
-const style = document.createElement('style');
-style.textContent = `
-  /* Hide scrollbar but keep scrolling */
-  body {
-    overflow: scroll !important;
-  }
 
-  /* Hide the scrollbar */
+    const iframeDoc =
+      livePreviewElement.contentDocument ||
+      livePreviewElement.contentWindow.document;
+    const style = document.createElement("style");
+    style.textContent = `
+  body {padding:30px 20px 30px 20px ;}
   ::-webkit-scrollbar {
-    display: none;
+    
   }
 `;
-iframeDoc.head.appendChild(style);
-if (currentBlock.tag === "html") {
-  document.querySelector(".currentCode").textContent = "HTML";
-  iframeDoc.body.innerHTML = typewriterElement.textContent; // Update HTML live preview
-} else if (currentBlock.tag === "css") {
-  document.querySelector(".currentCode").textContent = "CSS";
-  styleElement.textContent += char; // Append CSS to style tag
-  iframeDoc.head.appendChild(styleElement); // Ensure CSS is added to the iframe's head
-}else if (currentBlock.tag === "js") {
-  document.querySelector(".currentCode").textContent = "JavaScript";
-  iframeDoc.body.innerHTML = document.getElementById("htmlInput").value; 
 
-  try {
-    const script = document.createElement("script");
-    script.textContent = currentBlock.code.join("\n");
-    iframeDoc.body.appendChild(script); 
-  } catch (error) {
-    console.error("JavaScript Error:", error);
-  }
+if (currentBlock.tag === "html" || currentBlock.tag === "css" || currentBlock.tag === "js") {
+  typewriterElement.className = `language-${currentBlock.tag}`;
+  Prism.highlightElement(typewriterElement);
 }
+    iframeDoc.head.appendChild(style);
+    if (currentBlock.tag === "html") {
+      document.querySelector(".currentCode").textContent = "HTML";
+      iframeDoc.body.innerHTML = typewriterElement.textContent; 
+    
+    } else if (currentBlock.tag === "css") {
+      document.querySelector(".currentCode").textContent = "CSS";
+      styleElement.textContent += char; // Append CSS to style tag
+      iframeDoc.head.appendChild(styleElement); // Ensure CSS is added to the iframe's head
+    } else if (currentBlock.tag === "js") {
+      document.querySelector(".currentCode").textContent = "JavaScript";
+      iframeDoc.body.innerHTML = document.getElementById("htmlInput").value;
+    
+      try {
+        const script = document.createElement("script");
+        script.textContent = currentBlock.code.join("\n");
+        iframeDoc.body.appendChild(script);
+      } catch (error) {
+        console.error("JavaScript Error:", error);
+      }
+    }
+    
+    
 
-
-
-// Scroll the typewriter element to show the latest content
-typewriterElement.scrollTo(0, typewriterElement.scrollHeight);
-livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
+    // Scroll the typewriter element to show the latest content
+    typewriterElement.scrollTo(0, typewriterElement.scrollHeight);
+    livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
     typewriterContext.currentCharIndex++;
     typingInterval = setTimeout(typeNextChar, typeSpeed);
   } else {
@@ -131,7 +137,6 @@ livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
   // Ensure automatic hide logic is toggled at the end of typing
   toggleAutomaticHideOnTypingEnd();
 }
-
 
 function startTyping() {
   if (isTyping) return; // Prevent multiple typing instances
@@ -152,10 +157,21 @@ function startTyping() {
 
   // Clear the typewriter and iframe content
   typewriterElement.textContent = "";
-  const iframeDoc = livePreviewElement.contentDocument || livePreviewElement.contentWindow.document;
-  iframeDoc.open();
-  iframeDoc.write("<!DOCTYPE html><html><head></head><body></body></html>");
-  iframeDoc.close();
+  const iframeDoc =
+    livePreviewElement.contentDocument ||
+    livePreviewElement.contentWindow.document;
+    iframeDoc.open();
+    iframeDoc.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=0.5">
+        </head>
+        <body></body>
+      </html>
+    `);
+    iframeDoc.close();
+    
 
   // Initialize typewriter context
   let allCode = [
@@ -314,3 +330,19 @@ document.querySelectorAll(".darkMode").forEach((toggle) => {
 });
 
 loadDarkModeState();
+
+document.querySelector("#editeditor").addEventListener("click", (e) => {
+  
+ const typewrite = document.querySelector("#typewriter");
+ if(typewrite.contentEditable === "false"){
+  console.log("clicked");
+  typewrite.contentEditable = "true";
+typewrite.style.outline = "none";
+e.target.style.color = "red";
+}
+  else{
+    e.target.style.color = "black";
+    typewrite.contentEditable = "false";
+  }
+});
+    
