@@ -32,6 +32,8 @@ document.getElementById("cssInput").addEventListener("input", checkContent);
 document.getElementById("jsInput").addEventListener("input", checkContent);
 checkContent();
 
+
+
 function typeNextChar() {
   if (!typewriterContext || paused) return;
   const {
@@ -58,42 +60,65 @@ function typeNextChar() {
   const currentLine = currentBlock.code[currentLineIndex] || "";
   if (currentCharIndex < currentLine.length) {
     const char = currentLine[currentCharIndex];
+
+    // Handle "(delay)" command
     if (currentLine.trim() === "(delay)") {
       typewriterContext.currentLineIndex++;
       typewriterContext.currentCharIndex = 0;
       typingInterval = setTimeout(typeNextChar, codeSwitchDelay);
       return;
     }
+
     if (currentCharIndex === 0) {
       typewriterElement.textContent +=
         "\n" + currentLine.slice(0, currentCharIndex + 1);
     } else {
       typewriterElement.textContent += char;
     }
+// Update live preview based on the current block type
+const iframeDoc = livePreviewElement.contentDocument || livePreviewElement.contentWindow.document;
+const style = document.createElement('style');
+style.textContent = `
+  /* Hide scrollbar but keep scrolling */
+  body {
+    overflow: scroll !important;
+  }
 
-    // Update live preview
-    if (currentBlock.tag === "html") {
-      document.querySelector(".currentCode").textContent = "HTML";
-      livePreviewElement.innerHTML = typewriterElement.textContent;
-      livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
-    } else if (currentBlock.tag === "css") {
-      document.querySelector(".currentCode").textContent = "CSS";
-      styleElement.textContent += char;
-      livePreviewElement.innerHTML = document.getElementById("htmlInput").value;
-      livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
-    } else if (currentBlock.tag === "js") {
-      document.querySelector(".currentCode").textContent = "JavaScript";
-      livePreviewElement.innerHTML = document.getElementById("htmlInput").value;
-      const script = document.createElement("script");
-      script.textContent = currentBlock.code.join("\n");
-      livePreviewElement.appendChild(script);
-      livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
-    }
+  /* Hide the scrollbar */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+iframeDoc.head.appendChild(style);
+if (currentBlock.tag === "html") {
+  document.querySelector(".currentCode").textContent = "HTML";
+  iframeDoc.body.innerHTML = typewriterElement.textContent; // Update HTML live preview
+} else if (currentBlock.tag === "css") {
+  document.querySelector(".currentCode").textContent = "CSS";
+  styleElement.textContent += char; // Append CSS to style tag
+  iframeDoc.head.appendChild(styleElement); // Ensure CSS is added to the iframe's head
+}else if (currentBlock.tag === "js") {
+  document.querySelector(".currentCode").textContent = "JavaScript";
+  iframeDoc.body.innerHTML = document.getElementById("htmlInput").value; 
 
-    typewriterElement.scrollTo(0, typewriterElement.scrollHeight);
+  try {
+    const script = document.createElement("script");
+    script.textContent = currentBlock.code.join("\n");
+    iframeDoc.body.appendChild(script); 
+  } catch (error) {
+    console.error("JavaScript Error:", error);
+  }
+}
+
+
+
+// Scroll the typewriter element to show the latest content
+typewriterElement.scrollTo(0, typewriterElement.scrollHeight);
+livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
     typewriterContext.currentCharIndex++;
     typingInterval = setTimeout(typeNextChar, typeSpeed);
   } else {
+    // Move to the next line or block
     typewriterContext.currentCharIndex = 0;
     typewriterContext.currentLineIndex++;
     if (typewriterContext.currentLineIndex >= currentBlock.code.length) {
@@ -102,13 +127,18 @@ function typeNextChar() {
     }
     typingInterval = setTimeout(typeNextChar, typeSpeed);
   }
+
+  // Ensure automatic hide logic is toggled at the end of typing
   toggleAutomaticHideOnTypingEnd();
 }
 
+
 function startTyping() {
-  if (isTyping) return;
+  if (isTyping) return; // Prevent multiple typing instances
   isTyping = true;
   paused = false;
+
+  // Split input fields into lines of code
   const htmlCode = document.getElementById("htmlInput").value.split("\n");
   const cssCode = document.getElementById("cssInput").value.split("\n");
   const jsCode = document.getElementById("jsInput").value.split("\n");
@@ -118,10 +148,16 @@ function startTyping() {
   );
 
   const typewriterElement = document.getElementById("typewriter");
-  const livePreviewElement = document.getElementById("livePreview");
-  typewriterElement.textContent = "";
-  livePreviewElement.innerHTML = "";
+  const livePreviewElement = document.getElementById("livePreview"); // Use iframe for preview
 
+  // Clear the typewriter and iframe content
+  typewriterElement.textContent = "";
+  const iframeDoc = livePreviewElement.contentDocument || livePreviewElement.contentWindow.document;
+  iframeDoc.open();
+  iframeDoc.write("<!DOCTYPE html><html><head></head><body></body></html>");
+  iframeDoc.close();
+
+  // Initialize typewriter context
   let allCode = [
     { tag: "html", code: htmlCode },
     { tag: "css", code: cssCode },
@@ -135,13 +171,18 @@ function startTyping() {
     currentCharIndex: 0,
     typewriterElement,
     livePreviewElement,
-    styleElement: document.createElement("style"),
+    styleElement: iframeDoc.createElement("style"), // Add style element to iframe
     codeSwitchDelay,
+    htmlContent: "", // Track current HTML content
+    cssContent: "", // Track current CSS content
+    jsContent: "", // Track current JS content
   };
 
-  document.head.appendChild(typewriterContext.styleElement);
+  iframeDoc.head.appendChild(typewriterContext.styleElement); // Add CSS style element
   const toggleButton = document.getElementById("stopBtn");
   toggleButton.disabled = false;
+
+  // Start typing
   typeNextChar();
 }
 
@@ -203,7 +244,6 @@ function toggleAutomaticHideOnTypingEnd() {
   }
 
   if (!checkbox.checked) {
-    console.log("Checkbox is unchecked, skipping automatic hide");
     return;
   }
   const { allCode, currentBlockIndex } = typewriterContext;
