@@ -6,30 +6,25 @@ let typeSpeed = 100;
 let width = 200;
 let font = 20;
 
-document
-  .getElementById("realTimeSpeed")
-  .addEventListener("input", updateTypingSpeed);
+document.getElementById("realTimeSpeed").addEventListener("input", updateTypingSpeed);
 document.getElementById("widthControl").addEventListener("input", updateWidth);
 document.getElementById("fontControl").addEventListener("input", updateFont);
-document.getElementById("startBtn").addEventListener("click", startTyping);
-document.getElementById("stopBtn").addEventListener("click", toggleTyping);
+document.querySelectorAll(".startBtn").forEach((button) => {
+  button.addEventListener("click", startTyping);
+});
+document.querySelectorAll(".stopBtn").forEach((button) => {
+  button.addEventListener("click", toggleTyping);
+});
 document.getElementById("bgColor").addEventListener("input", updateBackground);
 
-
-
-
-
-
-// Check if content exists in the input fields initially
 function checkContent() {
   const htmlContent = document.getElementById("htmlInput").value.trim();
   const cssContent = document.getElementById("cssInput").value.trim();
   const jsContent = document.getElementById("jsInput").value.trim();
-  document.getElementById("startBtn").disabled = !(
-    htmlContent ||
-    cssContent ||
-    jsContent
-  );
+  document.querySelectorAll(".startBtn").forEach((button) => {
+    button.disabled = !(htmlContent || cssContent || jsContent);
+  });
+  
 }
 
 document.getElementById("htmlInput").addEventListener("input", checkContent);
@@ -54,9 +49,11 @@ function typeNextChar() {
   if (!currentBlock) {
     isTyping = false;
 
-    const toggleButton = document.getElementById("stopBtn");
-    toggleButton.disabled = true;
-    toggleButton.textContent = "Pause";
+    document.querySelectorAll(".stopBtn").forEach((button) => {
+      button.disabled = true;
+      button.textContent = "Pause";
+    });
+    
     return;
   }
 
@@ -64,7 +61,6 @@ function typeNextChar() {
   if (currentCharIndex < currentLine.length) {
     const char = currentLine[currentCharIndex];
 
-    // Handle "(delay)" command
     if (currentLine.trim() === "(delay)") {
       typewriterContext.currentLineIndex++;
       typewriterContext.currentCharIndex = 0;
@@ -90,23 +86,26 @@ function typeNextChar() {
   }
 `;
 
-if (currentBlock.tag === "html" || currentBlock.tag === "css" || currentBlock.tag === "js") {
-  typewriterElement.className = `language-${currentBlock.tag}`;
-  Prism.highlightElement(typewriterElement);
-}
+    if (
+      currentBlock.tag === "html" ||
+      currentBlock.tag === "css" ||
+      currentBlock.tag === "js"
+    ) {
+      typewriterElement.className = `language-${currentBlock.tag}`;
+      Prism.highlightElement(typewriterElement);
+    }
     iframeDoc.head.appendChild(style);
     if (currentBlock.tag === "html") {
       document.querySelector(".currentCode").textContent = "HTML";
-      iframeDoc.body.innerHTML = typewriterElement.textContent; 
-    
+      iframeDoc.body.innerHTML = typewriterElement.textContent;
     } else if (currentBlock.tag === "css") {
       document.querySelector(".currentCode").textContent = "CSS";
-      styleElement.textContent += char; // Append CSS to style tag
-      iframeDoc.head.appendChild(styleElement); // Ensure CSS is added to the iframe's head
+      styleElement.textContent += char;
+      iframeDoc.head.appendChild(styleElement);
     } else if (currentBlock.tag === "js") {
       document.querySelector(".currentCode").textContent = "JavaScript";
       iframeDoc.body.innerHTML = document.getElementById("htmlInput").value;
-    
+
       try {
         const script = document.createElement("script");
         script.textContent = currentBlock.code.join("\n");
@@ -115,16 +114,12 @@ if (currentBlock.tag === "html" || currentBlock.tag === "css" || currentBlock.ta
         console.error("JavaScript Error:", error);
       }
     }
-    
-    
 
-    // Scroll the typewriter element to show the latest content
     typewriterElement.scrollTo(0, typewriterElement.scrollHeight);
     livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
     typewriterContext.currentCharIndex++;
     typingInterval = setTimeout(typeNextChar, typeSpeed);
   } else {
-    // Move to the next line or block
     typewriterContext.currentCharIndex = 0;
     typewriterContext.currentLineIndex++;
     if (typewriterContext.currentLineIndex >= currentBlock.code.length) {
@@ -133,17 +128,18 @@ if (currentBlock.tag === "html" || currentBlock.tag === "css" || currentBlock.ta
     }
     typingInterval = setTimeout(typeNextChar, typeSpeed);
   }
-
-  // Ensure automatic hide logic is toggled at the end of typing
   toggleAutomaticHideOnTypingEnd();
 }
 
 function startTyping() {
-  if (isTyping) return; // Prevent multiple typing instances
+  if (isTyping) return;
   isTyping = true;
   paused = false;
+  const typewrite = document.querySelector("#typewriter");
+  document.querySelector("#editeditor").style.color = "white";
+  typewrite.contentEditable = false;
 
-  // Split input fields into lines of code
+
   const htmlCode = document.getElementById("htmlInput").value.split("\n");
   const cssCode = document.getElementById("cssInput").value.split("\n");
   const jsCode = document.getElementById("jsInput").value.split("\n");
@@ -153,15 +149,14 @@ function startTyping() {
   );
 
   const typewriterElement = document.getElementById("typewriter");
-  const livePreviewElement = document.getElementById("livePreview"); // Use iframe for preview
+  const livePreviewElement = document.getElementById("livePreview");
 
-  // Clear the typewriter and iframe content
   typewriterElement.textContent = "";
   const iframeDoc =
     livePreviewElement.contentDocument ||
     livePreviewElement.contentWindow.document;
-    iframeDoc.open();
-    iframeDoc.write(`
+  iframeDoc.open();
+  iframeDoc.write(`
       <!DOCTYPE html>
       <html>
         <head>
@@ -170,10 +165,8 @@ function startTyping() {
         <body></body>
       </html>
     `);
-    iframeDoc.close();
-    
+  iframeDoc.close();
 
-  // Initialize typewriter context
   let allCode = [
     { tag: "html", code: htmlCode },
     { tag: "css", code: cssCode },
@@ -187,38 +180,49 @@ function startTyping() {
     currentCharIndex: 0,
     typewriterElement,
     livePreviewElement,
-    styleElement: iframeDoc.createElement("style"), // Add style element to iframe
+    styleElement: iframeDoc.createElement("style"),
     codeSwitchDelay,
-    htmlContent: "", // Track current HTML content
-    cssContent: "", // Track current CSS content
-    jsContent: "", // Track current JS content
+    htmlContent: "",
+    cssContent: "",
+    jsContent: "",
   };
 
-  iframeDoc.head.appendChild(typewriterContext.styleElement); // Add CSS style element
-  const toggleButton = document.getElementById("stopBtn");
-  toggleButton.disabled = false;
+  iframeDoc.head.appendChild(typewriterContext.styleElement);
+  document.querySelectorAll(".stopBtn").forEach((button) => {
+  button.disabled = false;
+  
+});
 
-  // Start typing
   typeNextChar();
 }
 
 function toggleTyping() {
   const toggleButton = document.getElementById("stopBtn");
+  const toggleBtn = document.getElementById("rstopbtn");
 
   if (isTyping) {
     toggleButton.disabled = false;
+    toggleBtn.disabled = false;
+
     if (paused) {
       paused = false;
-      toggleButton.textContent = "Pause";
+      const typewrite = document.querySelector("#typewriter");
+      toggleButton.textContent = "Stop Writing ";
+      typewrite.contentEditable = false;
+      document.querySelector("#editeditor").style.color = "white";
+      toggleBtn.innerHTML = `<i class="bi bi-pause-circle-fill"></i> stop`;
       typeNextChar();
     } else {
       paused = true;
       toggleButton.textContent = "Resume";
-      clearTimeout(typingInterval);
-    }
-  }
+      toggleBtn.innerHTML = `<i class="bi bi-resume-circle-fill"></i> resume`;
+      clearTimeout(typingInterval);}}
 }
-document.getElementById("stopBtn").disabled = true;
+
+document.querySelectorAll(".stopBtn").forEach((button) => {
+  button.disabled = true;
+  
+});
 
 function updateBackground() {
   const color = document.getElementById("bgColor").value;
@@ -291,10 +295,19 @@ document.querySelectorAll(".toggleDashboard").forEach((toggle) => {
   );
 });
 
-document.querySelector(".settingBtn").addEventListener("click", () => {
+document.querySelector(".settingBtn").addEventListener("click", (e) => {
+  const button = e.currentTarget;
+  
+  if (button.style.backgroundColor === "red") {
+    button.style.backgroundColor = ""; 
+  } else {
+    button.style.backgroundColor = "red"; 
+  }
   toggleClass(".setting-dashboard", "show");
   toggleClass("body", "dashboard-hidden");
 });
+
+
 
 document.querySelector(".enableWordWrap").addEventListener("change", (e) => {
   toggleClass("#typewriter", "removeWordWrap", e.target.checked);
@@ -306,20 +319,16 @@ document.querySelector(".addBorder").addEventListener("change", (e) => {
 
 function toggleDarkMode() {
   toggleClass("body", "dark-mode");
-
   const isDarkMode = document.body.classList.contains("dark-mode");
   localStorage.setItem("darkMode", isDarkMode);
-
   document.querySelectorAll(".darkMode").forEach((toggle) => {
     toggle.checked = isDarkMode;
   });
 }
 
-// Load dark mode state
 function loadDarkModeState() {
   const isDarkMode = localStorage.getItem("darkMode") === "true";
   toggleClass("body", "dark-mode", isDarkMode);
-
   document.querySelectorAll(".darkMode").forEach((toggle) => {
     toggle.checked = isDarkMode;
   });
@@ -328,21 +337,35 @@ function loadDarkModeState() {
 document.querySelectorAll(".darkMode").forEach((toggle) => {
   toggle.addEventListener("change", toggleDarkMode);
 });
-
 loadDarkModeState();
 
 document.querySelector("#editeditor").addEventListener("click", (e) => {
-  
- const typewrite = document.querySelector("#typewriter");
- if(typewrite.contentEditable === "false"){
-  console.log("clicked");
-  typewrite.contentEditable = "true";
-typewrite.style.outline = "none";
-e.target.style.color = "red";
-}
-  else{
-    e.target.style.color = "black";
-    typewrite.contentEditable = "false";
+
+  const typewrite = document.querySelector("#typewriter");
+  if (typewrite.contentEditable === "false") {
+    clickonEdit();
+    console.log("editable");
+    typewrite.contentEditable = "true"; 
+    typewrite.style.outline = "none";
+    e.target.style.color = "red";
+   paused = true;
+  } else {
+    console.log("not editable");
+    typewrite.contentEditable = "false"; 
+    e.target.style.color = "white"; 
   }
 });
+function clickonEdit (){
+
+  paused = true;
+  
+  const toggleButton = document.getElementById("stopBtn");
+  const toggleBtn = document.getElementById("rstopbtn");
     
+   
+  
+ 
+    toggleButton.textContent = "Resume";
+    toggleBtn.innerHTML = `<i class="bi bi-resume-circle-fill"></i> resume`;
+    clearTimeout(typingInterval);
+}
