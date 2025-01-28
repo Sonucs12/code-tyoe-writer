@@ -5,7 +5,7 @@ let typewriterContext = null;
 let typeSpeed = 100;
 let width = 200;
 let font = 20;
-
+showAlert("Welcome to CodePen Clone", "success");
 document.getElementById("realTimeSpeed").addEventListener("input", updateTypingSpeed);
 document.getElementById("widthControl").addEventListener("input", updateWidth);
 document.getElementById("fontControl").addEventListener("input", updateFont);
@@ -78,13 +78,6 @@ function typeNextChar() {
     const iframeDoc =
       livePreviewElement.contentDocument ||
       livePreviewElement.contentWindow.document;
-    const style = document.createElement("style");
-    style.textContent = `
-  body {padding:30px 20px 30px 20px ;}
-  ::-webkit-scrollbar {
-    
-  }
-`;
 
     if (
       currentBlock.tag === "html" ||
@@ -94,26 +87,36 @@ function typeNextChar() {
       typewriterElement.className = `language-${currentBlock.tag}`;
       Prism.highlightElement(typewriterElement);
     }
-    iframeDoc.head.appendChild(style);
+  
     if (currentBlock.tag === "html") {
+      
       document.querySelector(".currentCode").textContent = "HTML";
       iframeDoc.body.innerHTML = typewriterElement.textContent;
     } else if (currentBlock.tag === "css") {
       document.querySelector(".currentCode").textContent = "CSS";
       styleElement.textContent += char;
       iframeDoc.head.appendChild(styleElement);
+   
     } else if (currentBlock.tag === "js") {
       document.querySelector(".currentCode").textContent = "JavaScript";
       iframeDoc.body.innerHTML = document.getElementById("htmlInput").value;
-
+      iframeDoc.defaultView.onerror = (message, source, lineno, colno, error) => {
+          const errorMessage = `JavaScript Error: ${message} at line ${lineno}, column ${colno}`;
+          showAlert(errorMessage, "danger");
+          console.error("JavaScript Error:", error);
+      };
+  
       try {
-        const script = document.createElement("script");
-        script.textContent = currentBlock.code.join("\n");
-        iframeDoc.body.appendChild(script);
+          const script = document.createElement("script");
+          script.textContent = currentBlock.code.join("\n");
+          iframeDoc.body.appendChild(script);
       } catch (error) {
-        console.error("JavaScript Error:", error);
+          const errorMessage = `Error in JavaScript code: ${error.message}`;
+          showAlert(errorMessage, "danger");
+          console.error("JavaScript Error:", error);
       }
-    }
+  }
+  
 
     typewriterElement.scrollTo(0, typewriterElement.scrollHeight);
     livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
@@ -152,6 +155,8 @@ function startTyping() {
   const livePreviewElement = document.getElementById("livePreview");
 
   typewriterElement.textContent = "";
+    
+
   const iframeDoc =
     livePreviewElement.contentDocument ||
     livePreviewElement.contentWindow.document;
@@ -160,19 +165,25 @@ function startTyping() {
       <!DOCTYPE html>
       <html>
         <head>
-          <meta name="viewport" content="width=device-width, initial-scale=0.5">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+           <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         </head>
         <body></body>
       </html>
     `);
   iframeDoc.close();
-
   let allCode = [
-    { tag: "html", code: htmlCode },
-    { tag: "css", code: cssCode },
-    { tag: "js", code: jsCode },
+    { tag: "html", code: ["<!-- HTML -->", ...htmlCode] }, 
+    { tag: "css", code: ["<!-- CSS -->", ...cssCode] },
+    { tag: "js", code: ["<!-- JS -->", ...jsCode] },
   ];
-
   typewriterContext = {
     allCode,
     currentBlockIndex: 0,
@@ -192,7 +203,7 @@ function startTyping() {
   button.disabled = false;
   
 });
-
+updateLivePreview();
   typeNextChar();
 }
 
@@ -340,32 +351,122 @@ document.querySelectorAll(".darkMode").forEach((toggle) => {
 loadDarkModeState();
 
 document.querySelector("#editeditor").addEventListener("click", (e) => {
+  const typewriter = document.querySelector("#typewriter");
 
-  const typewrite = document.querySelector("#typewriter");
-  if (typewrite.contentEditable === "false") {
-    clickonEdit();
-    console.log("editable");
-    typewrite.contentEditable = "true"; 
-    typewrite.style.outline = "none";
-    e.target.style.color = "red";
-   paused = true;
+  if (typewriter.contentEditable === "false") {
+    typewriter.contentEditable = "true"; // Make typewriter editable
+    e.target.style.color = "red"; // Change edit button color
+    paused = true;
+
+    // Add an input event listener for live updating
+    typewriter.addEventListener("input", () => {
+      syncTypewriterToInputs(); // Sync typewriter content back to inputs
+      updateLivePreview(); // Update the iframe in real time
+    });
   } else {
-    console.log("not editable");
-    typewrite.contentEditable = "false"; 
-    e.target.style.color = "white"; 
+    typewriter.contentEditable = "false"; // Make typewriter non-editable
+    e.target.style.color = "white"; // Revert edit button color
+    paused = false;
+
+    // Remove the input event listener
+    typewriter.removeEventListener("input", updateLivePreview);
   }
 });
-function clickonEdit (){
 
+function clickonEdit (){
   paused = true;
-  
   const toggleButton = document.getElementById("stopBtn");
   const toggleBtn = document.getElementById("rstopbtn");
-    
-   
-  
- 
     toggleButton.textContent = "Resume";
     toggleBtn.innerHTML = `<i class="bi bi-resume-circle-fill"></i> resume`;
     clearTimeout(typingInterval);
+}
+
+function showAlert(message, type) {
+  const alertContainer = document.createElement("div");
+  alertContainer.className = `alert alert-${type} alert-dismissible fade show alert-container`;
+  alertContainer.role = "alert";
+  alertContainer.innerHTML = `
+  <span>${message}</span>
+`;
+  document.body.appendChild(alertContainer);
+  setTimeout(() => {
+    alertContainer.classList.remove("show");
+    setTimeout(() => {
+      alertContainer.remove();
+    }, 300);
+  }, 2000);
+}
+
+function updateLivePreview() {
+    const typewriterContent = document.querySelector("#typewriter").textContent;
+    const iframe = document.querySelector("#livePreview");
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+    // Remove the cursor '|' from the content
+    const cleanedContent = typewriterContent.replace(/\|/g, ""); // Removes all '|'
+
+    // Extract HTML, CSS, and JS sections from the typewriter content
+    let htmlContent = "", cssContent = "", jsContent = "";
+    const lines = cleanedContent.split("\n");
+
+    let currentSection = "html"; // Default section
+    lines.forEach((line) => {
+        if (line.trim() === "<!-- CSS -->") {
+            currentSection = "css";
+        } else if (line.trim() === "<!-- JS -->") {
+            currentSection = "js";
+        } else {
+            if (currentSection === "html") htmlContent += line + "\n";
+            if (currentSection === "css") cssContent += line + "\n";
+            if (currentSection === "js") jsContent += line + "\n";
+        }
+    });
+
+    // Clear existing iframe content and write the new content
+    iframeDoc.open();
+    iframeDoc.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>${cssContent}</style>
+        </head>
+        <body>
+            ${htmlContent}
+            <script>
+                ${jsContent}
+            </script>
+        </body>
+        </html>
+    `);
+    iframeDoc.close();
+}
+
+
+function syncTypewriterToInputs() {
+  const typewriterContent = document.querySelector("#typewriter").textContent;
+
+  // Extract HTML, CSS, and JS sections based on separators
+  let htmlContent = "", cssContent = "", jsContent = "";
+  const lines = typewriterContent.split("\n");
+
+  let currentSection = "html"; // Default section
+  lines.forEach((line) => {
+    if (line.trim() === "<!-- HTML -->") {
+      currentSection = "html";
+    } else if (line.trim() === "<!-- CSS -->") {
+      currentSection = "css";
+    } else if (line.trim() === "<!-- JS -->") {
+      currentSection = "js";
+    } else {
+      if (currentSection === "html") htmlContent += line + "\n";
+      if (currentSection === "css") cssContent += line + "\n";
+      if (currentSection === "js") jsContent += line + "\n";
+    }
+  });
+
+  // Sync back to input fields
+  document.getElementById("htmlInput").value = htmlContent.trim();
+  document.getElementById("cssInput").value = cssContent.trim();
+  document.getElementById("jsInput").value = jsContent.trim();
 }

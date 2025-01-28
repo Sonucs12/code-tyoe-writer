@@ -7,6 +7,18 @@ body {
   overflow-y: hidden;
   transition: background-color 0.3s, color 0.3s;
 }
+.alert-container {
+  padding: 3px 10px 3px 10px;
+  font-size: 12px;
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  width: fit-content;
+  max-width: 90%;
+}
+
 
 * {
   box-sizing: border-box;
@@ -160,7 +172,7 @@ min-height: 30vh;
 
   font-size: 20px;
   padding: 30px;
-
+border-radius: 0px 0px 8px 8px;
   padding-bottom: 50px;
   scroll-behavior: smooth;
   transition: height 0.5s ease-in-out;
