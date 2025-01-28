@@ -27,9 +27,28 @@ function checkContent() {
   
 }
 
-document.getElementById("htmlInput").addEventListener("input", checkContent);
-document.getElementById("cssInput").addEventListener("input", checkContent);
-document.getElementById("jsInput").addEventListener("input", checkContent);
+
+function debounce(func, delay) {
+  let timeout;
+  return function (...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+const debouncedUpdateLivePreview = debounce(updateLivePreview, 300);
+document.getElementById("htmlInput").addEventListener("input", (e) => {
+  checkContent(e);
+  debouncedUpdateLivePreview(e);
+});
+document.getElementById("cssInput").addEventListener("input", (e) => {
+  checkContent(e);
+  debouncedUpdateLivePreview(e);
+});
+document.getElementById("jsInput").addEventListener("input", (e) => {
+  checkContent(e);
+  debouncedUpdateLivePreview(e);
+});
 checkContent();
 
 function typeNextChar() {
@@ -358,17 +377,17 @@ document.querySelector("#editeditor").addEventListener("click", (e) => {
     e.target.style.color = "red"; // Change edit button color
     paused = true;
 
-    // Add an input event listener for live updating
+   
     typewriter.addEventListener("input", () => {
-      syncTypewriterToInputs(); // Sync typewriter content back to inputs
-      updateLivePreview(); // Update the iframe in real time
+      syncTypewriterToInputs(); 
+      updateLivePreview(); 
     });
   } else {
-    typewriter.contentEditable = "false"; // Make typewriter non-editable
-    e.target.style.color = "white"; // Revert edit button color
+    typewriter.contentEditable = "false"; 
+    e.target.style.color = "white"; 
     paused = false;
 
-    // Remove the input event listener
+ 
     typewriter.removeEventListener("input", updateLivePreview);
   }
 });
@@ -402,15 +421,10 @@ function updateLivePreview() {
     const typewriterContent = document.querySelector("#typewriter").textContent;
     const iframe = document.querySelector("#livePreview");
     const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-    // Remove the cursor '|' from the content
-    const cleanedContent = typewriterContent.replace(/\|/g, ""); // Removes all '|'
-
-    // Extract HTML, CSS, and JS sections from the typewriter content
+    const cleanedContent = typewriterContent.replace(/\|/g, "");
     let htmlContent = "", cssContent = "", jsContent = "";
     const lines = cleanedContent.split("\n");
-
-    let currentSection = "html"; // Default section
+    let currentSection = "html"; 
     lines.forEach((line) => {
         if (line.trim() === "<!-- CSS -->") {
             currentSection = "css";
@@ -423,7 +437,6 @@ function updateLivePreview() {
         }
     });
 
-    // Clear existing iframe content and write the new content
     iframeDoc.open();
     iframeDoc.write(`
         <!DOCTYPE html>
@@ -445,12 +458,9 @@ function updateLivePreview() {
 
 function syncTypewriterToInputs() {
   const typewriterContent = document.querySelector("#typewriter").textContent;
-
-  // Extract HTML, CSS, and JS sections based on separators
   let htmlContent = "", cssContent = "", jsContent = "";
   const lines = typewriterContent.split("\n");
-
-  let currentSection = "html"; // Default section
+  let currentSection = "html"; 
   lines.forEach((line) => {
     if (line.trim() === "<!-- HTML -->") {
       currentSection = "html";
@@ -465,7 +475,7 @@ function syncTypewriterToInputs() {
     }
   });
 
-  // Sync back to input fields
+
   document.getElementById("htmlInput").value = htmlContent.trim();
   document.getElementById("cssInput").value = cssContent.trim();
   document.getElementById("jsInput").value = jsContent.trim();
