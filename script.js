@@ -97,32 +97,41 @@ function typeNextChar() {
       document.querySelector(".currentCode").textContent = "CSS";
       styleElement.textContent += char;
       iframeDoc.head.appendChild(styleElement);
-    }else if (currentBlock.tag === "js") {
+    } else if (currentBlock.tag === "js") {
       document.querySelector(".currentCode").textContent = "JavaScript";
-      iframeDoc.body.innerHTML = document.getElementById("htmlInput").value;
-    
+
+      const htmlContent = document.getElementById("htmlInput").value;
+      iframeDoc.body.innerHTML = htmlContent;
+
+      const existingScripts = iframeDoc.querySelectorAll("script");
+      existingScripts.forEach((script) => script.remove());
+
       try {
         const script = document.createElement("script");
-        script.textContent = currentBlock.code.join("\n");
+        script.type = "text/javascript";
+
+        script.textContent = `(function() {
+              ${currentBlock.code.join("\n")}
+          })();`;
+
         iframeDoc.body.appendChild(script);
-    
-        
-        iframeDoc.defaultView.onerror = (message, source, lineno, colno, error) => {
+
+        iframeDoc.defaultView.onerror = (
+          message,
+          source,
+          lineno,
+          colno,
+          error
+        ) => {
           const errorMessage = `JavaScript Error: ${message} at line ${lineno}, column ${colno}\nSource: ${source}`;
-          console.error(errorMessage);
-          showAlert(errorMessage, "danger");
-          
-          
-          return true; 
+
+          parent.showAlert(errorMessage, "danger");
+          return true;
         };
-    
       } catch (error) {
-        console.error("Error in JS code:", error);
-        showAlert(`JavaScript Error: ${error.message}`, "danger");
-        
+        parent.showAlert("JavaScript Error: " + error.message, "danger");
       }
     }
-    
 
     typewriterElement.scrollTo(0, typewriterElement.scrollHeight);
     livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
@@ -350,8 +359,8 @@ document.querySelector("#editeditor").addEventListener("click", (e) => {
   const typewriter = document.querySelector("#typewriter");
 
   if (typewriter.contentEditable === "false") {
-    typewriter.contentEditable = "true"; // Make typewriter editable
-    e.target.style.color = "red"; // Change edit button color
+    typewriter.contentEditable = "true";
+    e.target.style.color = "red";
     paused = true;
   } else {
     typewriter.contentEditable = "false";
@@ -376,7 +385,7 @@ function showAlert(message, type) {
   alertContainer.innerHTML = `
   <span>${message}</span>
   `;
-  
+
   document.body.appendChild(alertContainer);
   alertContainer.style.transform = "translateX(-50%) scale(0)";
   setTimeout(() => {
@@ -385,9 +394,9 @@ function showAlert(message, type) {
   }, 10);
 
   setTimeout(() => {
-    alertContainer.style.transform = "translateX(-50%) scale(0)"; 
+    alertContainer.style.transform = "translateX(-50%) scale(0)";
     setTimeout(() => {
       alertContainer.remove();
-    }, 300); 
+    }, 300);
   }, 2000);
 }

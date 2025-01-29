@@ -10,18 +10,17 @@ body {
   font-family: poppins, sans-serif;
   font-weight: 600;
   font-size: 18px;
-  
 }
-.logo-container{
+.logo-container {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-left: 8px;
- padding: 2px 8px 2px 8px;
+  padding: 2px 8px 2px 8px;
   border-radius: 5px;
   transition: all 0.3s ease-in-out;
 }
-.logo-container:hover{
+.logo-container:hover {
   background-color: #092c4f;
 }
 
@@ -443,10 +442,10 @@ body {
   top: 20px;
   left: 50%;
   transform-origin: center;
-  transform: translateX(-50%) scale(0); 
+  transform: translateX(-50%) scale(0);
   z-index: 1050;
   border-radius: 5px;
-  transition: transform 0.3s ease-in-out; 
+  transition: transform 0.3s ease-in-out;
 }
 .alert-container .btn-close {
   height: auto;
