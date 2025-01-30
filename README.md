@@ -68,8 +68,8 @@ Traditional code editors lack the "typing simulation" experience needed for effe
 
 ## 🔗 Connect & Resources  
 - **Live Demo**: [https://sonucs12.github.io/code-typer/](https://sonucs12.github.io/code-typer/)
-- **Portfolio**: [Your Portfolio Link](https://sonucs-portfolio.netlify.app/)
-- **LinkedIn**: [[Your LinkedIn Profile](https://www.linkedin.com/in/sonu-kumar-15b6b3239/)
+- **Portfolio**: [https://sonucs-portfolio.netlify.app/](https://sonucs-portfolio.netlify.app/)
+- **LinkedIn**: [https://www.linkedin.com/in/sonu-kumar-15b6b3239/](https://www.linkedin.com/in/sonu-kumar-15b6b3239/)
 
 
 ## 🤝 Contributing  
