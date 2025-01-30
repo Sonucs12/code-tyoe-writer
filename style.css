@@ -57,7 +57,9 @@ body {
 ::-webkit-scrollbar-corner {
   background: #f1f1f1;
 }
-
+.nav-cont{
+  padding: 0;
+}
 .form-check-container {
   display: flex;
   align-items: center;
@@ -140,7 +142,7 @@ body {
 }
 
 .display-section {
-  padding: 24px;
+  padding: 24px 16px 24px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -201,7 +203,7 @@ body {
   overflow-wrap: break-word;
   text-align: center;
   vertical-align: middle;
-  border: 1px solid white;
+  border: 1px solid #6c757d;
   overflow-y: auto;
   overflow-x: hidden;
   background-color: #f1f1f1;
@@ -274,6 +276,7 @@ body {
   width: 350px;
   transition: transform 0.5s, scale 0.5s;
   transform: translateY(0);
+  border: 1px solid #6c757d;
   background-color: black;
 }
 
