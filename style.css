@@ -11,6 +11,7 @@ body {
   font-weight: 600;
   font-size: 18px;
 }
+
 .logo-container {
   display: flex;
   align-items: center;
@@ -20,6 +21,7 @@ body {
   border-radius: 5px;
   transition: all 0.3s ease-in-out;
 }
+
 .logo-container:hover {
   background-color: #092c4f;
 }
@@ -27,9 +29,11 @@ body {
 * {
   box-sizing: border-box;
 }
+
 .btn {
   cursor: pointer;
 }
+
 ::-webkit-scrollbar {
   width: 3px;
   height: 3px;
@@ -56,7 +60,6 @@ body {
 
 .form-check-container {
   display: flex;
-
   align-items: center;
   padding: 10px;
   border-radius: 5px;
@@ -126,6 +129,7 @@ body {
 .dashboard-hidden #dashboard {
   overflow: hidden;
 }
+
 .start-stopbtn {
   display: flex;
   align-items: center;
@@ -134,6 +138,7 @@ body {
   margin-left: auto;
   margin-right: 20px;
 }
+
 .display-section {
   padding: 24px;
   display: flex;
@@ -161,44 +166,25 @@ body {
 }
 
 #typewriter {
-  width: 100%;
   white-space: pre-wrap;
   overflow-wrap: break-word;
   overflow-y: auto;
   overflow-x: hidden;
-position: relative;
+  position: relative;
   min-height: 30vh;
   max-height: 40vh;
   color: black;
   font-weight: 600;
   background-color: #f1f1f1;
   font-family: Consolas, "Courier New", monospace;
-
-  font-size: 20px;
+  font-size: 18px;
   padding: 30px;
-  border-radius: 0px 0px 8px 8px;
+  border-radius: 10px 10px 8px 8px;
   padding-bottom: 50px;
   scroll-behavior: smooth;
   transition: height 0.5s ease-in-out;
 }
-#cursor {
-  animation: blink 0.7s step-end infinite;
-  font-weight: bold;
-  color: #00ff00;
-  opacity: 0;
-  position: absolute;
- 
-  left: 0;
-}
 
-.typing #cursor {
-  opacity: 1;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
 #typewriter.removeWordWrap {
   overflow-wrap: normal;
   overflow-x: auto;
@@ -209,21 +195,18 @@ position: relative;
 }
 
 #livePreview {
-  width: 500px;
+  width: 350px;
   max-width: 800px;
   word-wrap: break-word;
   overflow-wrap: break-word;
   text-align: center;
   vertical-align: middle;
   border: 1px solid white;
-
   overflow-y: auto;
   overflow-x: hidden;
   background-color: #f1f1f1;
-
-  height: 42vh;
-
-  max-height: 80vh;
+  height: 40vh;
+  max-height: 90vh;
   font-family: Arial, sans-serif;
   scroll-behavior: smooth;
   transition: height 0.5s ease-in-out;
@@ -270,48 +253,46 @@ position: relative;
 
 .hidden-dashboard #livePreview,
 .hidden-dashboard #typewriter {
-  max-height: 90vh;
+  max-height: 100vh;
   height: 80vh;
 }
 
 .hidden-dashboard #typewriter {
-  height: calc(80vh - 3.6vh);
+  height: calc(80vh - 4vh);
 }
-
-
 
 .automaticHide .iphone {
   transform: translateY(10rem);
-
   scale: 0;
 }
 
 .automaticHide #livePreview {
-  height: 400px;
+  height: 80vh;
 }
 
 .iphone {
-  width: 500px;
+  width: 350px;
   transition: transform 0.5s, scale 0.5s;
   transform: translateY(0);
+  background-color: black;
 }
 
 .color {
   display: flex;
 
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   padding: 0px 10px 0px 10px;
   gap: 5px;
 
   background-color: black;
-  height: 20px;
+  height: 4vh;
 }
 
 .circle {
   border-radius: 50%;
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
 }
 
 .red {
@@ -331,6 +312,7 @@ position: relative;
   font-size: 12px;
   margin-left: 10px;
 }
+
 #editeditor {
   color: white;
   font-size: 12px;
@@ -338,12 +320,15 @@ position: relative;
   transition: all 0.2s ease-in-out;
   margin-left: auto;
 }
+
 #editeditor:hover {
   color: #bcc1bc;
 }
+
 #editeditor:focus {
   color: #ff004c;
 }
+
 .dark-mode {
   background-color: #121212;
   color: #ffffff;
@@ -408,10 +393,6 @@ position: relative;
   color: #ffffff;
 }
 
-.dark-mode #cursor {
-  color: #00ff00;
-}
-
 .dark-mode #htmlInput,
 .dark-mode #cssInput,
 .dark-mode #jsInput {
@@ -439,7 +420,6 @@ position: relative;
   color: #ffffff;
 }
 
-
 .alert-container {
   padding: 10px;
   display: flex;
@@ -455,10 +435,9 @@ position: relative;
   border-radius: 5px;
   transition: transform 0.3s ease-in-out;
 }
+
 .alert-container .btn-close {
   height: auto;
   margin-left: auto;
   margin-right: auto;
 }
-
-

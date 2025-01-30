@@ -3,8 +3,8 @@ let isTyping = false;
 let paused = false;
 let typewriterContext = null;
 let typeSpeed = 100;
-let width = 200;
-let font = 20;
+let width = 500;
+let font = 18;
 showAlert("Welcome to CodePen Clone", "success");
 
 document
@@ -62,9 +62,8 @@ function typeNextChar() {
   //   if (currentBlockIndex > 0) {
   //     typewriterElement.textContent += "\n\n";
   //   }
-  // } 
-  // 
- 
+  // }
+
   const currentLine = currentBlock.code[currentLineIndex] || "";
   if (currentCharIndex < currentLine.length) {
     const char = currentLine[currentCharIndex];
@@ -78,10 +77,10 @@ function typeNextChar() {
 
     if (currentCharIndex === 0) {
       typewriterElement.textContent +=
-        "\n" + currentLine.slice(0, currentCharIndex + 1); void typewriterElement.offsetWidth
+        "\n" + currentLine.slice(0, currentCharIndex + 1);
     } else {
       typewriterElement.textContent += char;
-   
+      Prism.highlightElement(typewriterElement);
     }
 
     const iframeDoc =
@@ -93,7 +92,8 @@ function typeNextChar() {
       currentBlock.tag === "css" ||
       currentBlock.tag === "js"
     ) {
-      typewriterElement.className = `language-${currentBlock.tag}`;
+      typewriterElement.className = `language-${currentBlock.tag} line-numbers`;
+      typewriterElement.setAttribute("data-start", "1");
       Prism.highlightElement(typewriterElement);
     }
 
@@ -106,40 +106,43 @@ function typeNextChar() {
       iframeDoc.head.appendChild(styleElement);
     } else if (currentBlock.tag === "js") {
       document.querySelector(".currentCode").textContent = "JavaScript";
-      if (currentLineIndex === currentBlock.code.length - 1 &&
-        currentCharIndex === currentLine.length - 1) {
-      const htmlContent = document.getElementById("htmlInput").value;
-      iframeDoc.body.innerHTML = htmlContent;
+      if (
+        currentLineIndex === currentBlock.code.length - 1 &&
+        currentCharIndex === currentLine.length - 1
+      ) {
+        const htmlContent = document.getElementById("htmlInput").value;
+        iframeDoc.body.innerHTML = htmlContent;
 
-      const existingScripts = iframeDoc.querySelectorAll("script");
-      existingScripts.forEach((script) => script.remove());
+        const existingScripts = iframeDoc.querySelectorAll("script");
+        existingScripts.forEach((script) => script.remove());
 
-      try {
-        const script = document.createElement("script");
-        script.type = "text/javascript";
+        try {
+          const script = document.createElement("script");
+          script.type = "text/javascript";
 
-        script.textContent = `(function() {
+          script.textContent = `(function() {
               ${currentBlock.code.join("\n")}
           })();`;
 
-        iframeDoc.body.appendChild(script);
+          iframeDoc.body.appendChild(script);
 
-        iframeDoc.defaultView.onerror = (
-          message,
-          source,
-          lineno,
-          colno,
-          error
-        ) => {
-          const errorMessage = `JavaScript Error: ${message} at line ${lineno}, column ${colno}\nSource: ${source}`;
+          iframeDoc.defaultView.onerror = (
+            message,
+            source,
+            lineno,
+            colno,
+            error
+          ) => {
+            const errorMessage = `JavaScript Error: ${message} at line ${lineno}, column ${colno}\nSource: ${source}`;
 
-          parent.showAlert(errorMessage, "danger");
-          return true;
-        };
-      } catch (error) {
-        parent.showAlert("JavaScript Error: " + error.message, "danger");
+            parent.showAlert(errorMessage, "danger");
+            return true;
+          };
+        } catch (error) {
+          parent.showAlert("JavaScript Error: " + error.message, "danger");
+        }
       }
-    }}
+    }
 
     typewriterElement.scrollTo(0, typewriterElement.scrollHeight);
     livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
@@ -163,11 +166,11 @@ function startTyping() {
   paused = false;
   const typewrite = document.querySelector("#typewriter");
   const typewriter = document.getElementById("typewriter");
-  typewriter.classList.add('typing');
-  typewriter.textContent = '';
+  typewriter.classList.add("typing");
+  typewriter.textContent = "";
   document.querySelector("#editeditor").style.color = "white";
   typewrite.contentEditable = false;
-  
+
   const htmlCode = document.getElementById("htmlInput").value.split("\n");
   const cssCode = document.getElementById("cssInput").value.split("\n");
   const jsCode = document.getElementById("jsInput").value.split("\n");
@@ -191,7 +194,8 @@ function startTyping() {
         <head>
           <meta name="viewport" content="width=device-width, initial-scale=1">
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"><style>body{padding:20px 0px 20px 0px;}
+         body::-webkit-scrollbar{display: none;}<style>
         </head>
         <body></body>
       </html>
@@ -239,7 +243,7 @@ function toggleTyping() {
       typewrite.contentEditable = false;
       document.querySelector("#editeditor").style.color = "white";
       toggleBtn.innerHTML = `<i class="bi bi-pause-circle-fill"></i> stop`;
-      typewriter.classList.add('typing');
+      typewriter.classList.add("typing");
       typeNextChar();
     } else {
       paused = true;
