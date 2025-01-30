@@ -58,7 +58,13 @@ function typeNextChar() {
 
     return;
   }
-
+  // if (currentLineIndex === 0 && currentCharIndex === 0) {
+  //   if (currentBlockIndex > 0) {
+  //     typewriterElement.textContent += "\n\n";
+  //   }
+  // } 
+  // 
+ 
   const currentLine = currentBlock.code[currentLineIndex] || "";
   if (currentCharIndex < currentLine.length) {
     const char = currentLine[currentCharIndex];
@@ -72,9 +78,10 @@ function typeNextChar() {
 
     if (currentCharIndex === 0) {
       typewriterElement.textContent +=
-        "\n" + currentLine.slice(0, currentCharIndex + 1);
+        "\n" + currentLine.slice(0, currentCharIndex + 1); void typewriterElement.offsetWidth
     } else {
       typewriterElement.textContent += char;
+   
     }
 
     const iframeDoc =
@@ -99,7 +106,8 @@ function typeNextChar() {
       iframeDoc.head.appendChild(styleElement);
     } else if (currentBlock.tag === "js") {
       document.querySelector(".currentCode").textContent = "JavaScript";
-
+      if (currentLineIndex === currentBlock.code.length - 1 &&
+        currentCharIndex === currentLine.length - 1) {
       const htmlContent = document.getElementById("htmlInput").value;
       iframeDoc.body.innerHTML = htmlContent;
 
@@ -131,7 +139,7 @@ function typeNextChar() {
       } catch (error) {
         parent.showAlert("JavaScript Error: " + error.message, "danger");
       }
-    }
+    }}
 
     typewriterElement.scrollTo(0, typewriterElement.scrollHeight);
     livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
@@ -154,9 +162,12 @@ function startTyping() {
   isTyping = true;
   paused = false;
   const typewrite = document.querySelector("#typewriter");
+  const typewriter = document.getElementById("typewriter");
+  typewriter.classList.add('typing');
+  typewriter.textContent = '';
   document.querySelector("#editeditor").style.color = "white";
   typewrite.contentEditable = false;
-
+  
   const htmlCode = document.getElementById("htmlInput").value.split("\n");
   const cssCode = document.getElementById("cssInput").value.split("\n");
   const jsCode = document.getElementById("jsInput").value.split("\n");
@@ -216,7 +227,7 @@ function startTyping() {
 function toggleTyping() {
   const toggleButton = document.getElementById("stopBtn");
   const toggleBtn = document.getElementById("rstopbtn");
-
+  const typewriter = document.getElementById("typewriter");
   if (isTyping) {
     toggleButton.disabled = false;
     toggleBtn.disabled = false;
@@ -228,6 +239,7 @@ function toggleTyping() {
       typewrite.contentEditable = false;
       document.querySelector("#editeditor").style.color = "white";
       toggleBtn.innerHTML = `<i class="bi bi-pause-circle-fill"></i> stop`;
+      typewriter.classList.add('typing');
       typeNextChar();
     } else {
       paused = true;
