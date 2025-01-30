@@ -2,9 +2,10 @@
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-FF4088?style=for-the-badge)](https://sonucs12.github.io/code-typer/)  
 A CodePen-like platform that simulates code typing with live previews. Perfect for creating coding tutorials/demos!
+## Overview
+This project replicates a **CodePen-like environment**, allowing users to type HTML, CSS, and JavaScript code in real time. The code is dynamically displayed with syntax highlighting, and changes are immediately previewed in a live iframe.
 
-![Preview](https://via.placeholder.com/800x400.png?text=CodeTyper+Preview+Animation)  
-*(Add actual screenshot later)*
+![Screenshot 2025-01-30 181724](https://github.com/user-attachments/assets/9ab6041b-415c-493e-9769-e229be2d48a1)
 
 ## 🚀 Live Demo  
 Experience it now: [https://sonucs12.github.io/code-typer/](https://sonucs12.github.io/code-typer/)
@@ -67,9 +68,9 @@ Traditional code editors lack the "typing simulation" experience needed for effe
 
 ## 🔗 Connect & Resources  
 - **Live Demo**: [https://sonucs12.github.io/code-typer/](https://sonucs12.github.io/code-typer/)
-- **Portfolio**: [Your Portfolio Link] *(Add your link)*
-- **LinkedIn**: [Your LinkedIn Profile] *(Add your link)*
-- **YouTube**: [Your YouTube Channel] *(Add your link)*
+- **Portfolio**: [Your Portfolio Link](https://sonucs-portfolio.netlify.app/)
+- **LinkedIn**: [[Your LinkedIn Profile](https://www.linkedin.com/in/sonu-kumar-15b6b3239/)
+
 
 ## 🤝 Contributing  
 Contributions are welcome! Please open an issue first to discuss proposed changes.
@@ -79,5 +80,5 @@ Contributions are welcome! Please open an issue first to discuss proposed change
 
 ---
 
-Made with ❤️ by [Your Name]  
-*Give coding demos the presentation power they deserve!*
+Made with ❤️ by [sonu kumar]  
+
