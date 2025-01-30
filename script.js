@@ -58,12 +58,16 @@ function typeNextChar() {
 
     return;
   }
-  // if (currentLineIndex === 0 && currentCharIndex === 0) {
-  //   if (currentBlockIndex > 0) {
-  //     typewriterElement.textContent += "\n\n";
-  //   }
-  // }
-
+ 
+  if (currentLineIndex === 0 && currentCharIndex === 0 && currentBlockIndex > 0) {
+    const previousBlock = allCode[currentBlockIndex - 1];
+    if (previousBlock.code.length > 0) {
+      typewriterElement.innerHTML += `\n\n/* Starting ${currentBlock.tag.toUpperCase()} Code */`;
+      Prism.highlightElement(typewriterElement);
+      typewriterElement.scrollTo(0, typewriterElement.scrollHeight);
+    }
+  }
+  
   const currentLine = currentBlock.code[currentLineIndex] || "";
   if (currentCharIndex < currentLine.length) {
     const char = currentLine[currentCharIndex];
@@ -96,7 +100,7 @@ function typeNextChar() {
       typewriterElement.setAttribute("data-start", "1");
       Prism.highlightElement(typewriterElement);
     }
-
+ 
     if (currentBlock.tag === "html") {
       document.querySelector(".currentCode").textContent = "HTML";
       iframeDoc.body.innerHTML = typewriterElement.textContent;
@@ -106,10 +110,7 @@ function typeNextChar() {
       iframeDoc.head.appendChild(styleElement);
     } else if (currentBlock.tag === "js") {
       document.querySelector(".currentCode").textContent = "JavaScript";
-      if (
-        currentLineIndex === currentBlock.code.length - 1 &&
-        currentCharIndex === currentLine.length - 1
-      ) {
+      if (currentLineIndex === currentBlock.code.length - 1 && currentCharIndex === currentLine.length - 1) {
         const htmlContent = document.getElementById("htmlInput").value;
         iframeDoc.body.innerHTML = htmlContent;
 
@@ -154,6 +155,7 @@ function typeNextChar() {
     if (typewriterContext.currentLineIndex >= currentBlock.code.length) {
       typewriterContext.currentBlockIndex++;
       typewriterContext.currentLineIndex = 0;
+      return;
     }
     typingInterval = setTimeout(typeNextChar, typeSpeed);
   }
@@ -353,6 +355,17 @@ function toggleDarkMode() {
   toggleClass("body", "dark-mode");
   const isDarkMode = document.body.classList.contains("dark-mode");
   localStorage.setItem("darkMode", isDarkMode);
+    // Prism theme switch
+    const prismTheme = document.getElementById("prismTheme");
+    const prismDarkTheme = document.getElementById("prismDarkTheme");
+  
+    if (isDarkMode) {
+      prismTheme.disabled = true;
+      prismDarkTheme.disabled = false;
+    } else {
+      prismTheme.disabled = false;
+      prismDarkTheme.disabled = true;
+    }
   document.querySelectorAll(".darkMode").forEach((toggle) => {
     toggle.checked = isDarkMode;
   });
@@ -361,6 +374,9 @@ function toggleDarkMode() {
 function loadDarkModeState() {
   const isDarkMode = localStorage.getItem("darkMode") === "true";
   toggleClass("body", "dark-mode", isDarkMode);
+   // Toggle Prism Theme on load
+   document.getElementById("prismTheme").disabled = isDarkMode;
+   document.getElementById("prismDarkTheme").disabled = !isDarkMode;
   document.querySelectorAll(".darkMode").forEach((toggle) => {
     toggle.checked = isDarkMode;
   });
