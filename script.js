@@ -3,7 +3,7 @@ let isTyping = false;
 let paused = false;
 let typewriterContext = null;
 let typeSpeed = 100;
-let width = 500;
+let width = 35;
 let font = 20;
 
 const editor = document.getElementById("typewriter");
@@ -236,6 +236,17 @@ document.querySelectorAll(".toggleDashboard").forEach((toggle) => {
     toggleClass("body", "hidden-dashboard")
   );
 });
+document.querySelector("#expand-dashboard").addEventListener("click", () => {
+  toggleClass("body", "ex-dashboard");
+  const icon = document.querySelector("#expand-dashboard i");
+  if (document.body.classList.contains("ex-dashboard")) {
+    icon.className = "bi bi-arrow-left-circle-fill float-end"; 
+  } else {
+    icon.className = "bi bi-arrow-right-circle-fill float-end";
+  }
+});
+
+
 
 function toggleTyping() {
   const toggleButton = document.getElementById("stopBtn");
@@ -279,8 +290,8 @@ function updateTypingSpeed() {
 
 function updateWidth() {
   let width = parseInt(document.getElementById("widthControl").value);
-  document.getElementById("livePreview").style.width = width + "px";
-  document.querySelector(".iphone").style.width = width + "px";
+  document.getElementById("livePreview").style.width = width + "%";
+  document.querySelector(".iphone").style.width = width + "%";
 }
 
 function updateFont() {

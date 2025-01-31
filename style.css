@@ -136,6 +136,7 @@ button {
 
 .setting-dashboard.show {
   left: 0;
+  z-index: 99;
 }
 
 #dashboard {
@@ -150,7 +151,25 @@ button {
 .dashboard-hidden #dashboard {
   overflow: hidden;
 }
-
+.main-dashboard{
+   transition: filter 0.5s ease;
+}
+.dashboard-hidden .main-dashboard{
+   filter: blur(5px);
+  
+   z-index: 90;
+}
+.ex-dashboard #dashboard{
+  width: 50%;
+}
+#expand-dashboard{
+  cursor: pointer; transition: all 0.2s ease-in-out;
+}
+#expand-dashboard:hover{
+  cursor: pointer;
+  color: #bcc1bc;
+ 
+}
 .start-stopbtn {
   display: flex;
   align-items: center;
@@ -162,8 +181,7 @@ button {
 .about {
   font-size: 10px;
   color: #555;
-  text-align: center;
-  margin-left: 25%;
+  
 }
 .display-section {
   padding: 24px 16px 24px 16px;
@@ -186,7 +204,9 @@ button {
   background-color: #f8f9fa;
   z-index: 10;
 }
-
+.ex-dashboard #recordingSection{
+  width: 50%;
+}
 #typewriter::-webkit-scrollbar,
 #livePreview::-webkit-scrollbar {
   display: none;
@@ -211,6 +231,7 @@ button {
   scroll-behavior: smooth;
   transition: height 0.5s ease-in-out, width 0.3s ease,
     max-height 0.5s ease-in-out;
+    
 }
 
 #typewriter.removeWordWrap {
@@ -223,8 +244,8 @@ button {
 }
 
 #livePreview {
-  width: 350px;
-  max-width: 800px;
+  width:35%;
+  max-width: 100%;
   word-wrap: break-word;
   overflow-wrap: break-word;
   text-align: center;
@@ -292,6 +313,7 @@ button {
 
 .hidden-dashboard #typewriter {
   height: calc(85vh - 4vh);
+  
 }
 
 .automaticHide .iphone {
@@ -311,10 +333,11 @@ button {
 .hidden-dashboard .automaticHide .display-section #livePreview {
   height: 85vh;
   width: 100vw;
+
 }
 
 .iphone {
-  width: 350px;
+  width: 35%;
   transition: transform 0.5s, scale 0.5s, width 0.3s ease,
     height 0.5s ease-in-out, max-height 0.5s ease-in-out;
   transform: translateY(0);
@@ -322,6 +345,7 @@ button {
   background-color: black;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), 0 1px 6px rgba(0, 0, 0, 0.1),
     0 8px 24px rgba(0, 0, 0, 0.1), 0 0 15px rgba(255, 175, 51, 0.2);
+   
 }
 
 .color {
