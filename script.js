@@ -4,7 +4,12 @@ let paused = false;
 let typewriterContext = null;
 let typeSpeed = 100;
 let width = 500;
-let font = 18;
+let font = 20;
+
+const editor = document.getElementById("typewriter");
+editor.addEventListener("input", () => {
+  Prism.highlightAll();
+});
 showAlert("Welcome to CodePen Clone", "success");
 document
   .getElementById("realTimeSpeed")
@@ -30,6 +35,7 @@ document.getElementById("htmlInput").addEventListener("input", checkContent);
 document.getElementById("cssInput").addEventListener("input", checkContent);
 document.getElementById("jsInput").addEventListener("input", checkContent);
 checkContent();
+
 function typeNextChar() {
   if (!typewriterContext || paused) return;
   const {
@@ -51,7 +57,11 @@ function typeNextChar() {
     });
     return;
   }
-  if (currentLineIndex === 0 && currentCharIndex === 0 && currentBlockIndex > 0) {
+  if (
+    currentLineIndex === 0 &&
+    currentCharIndex === 0 &&
+    currentBlockIndex > 0
+  ) {
     const previousBlock = allCode[currentBlockIndex - 1];
     if (previousBlock.code.length > 0) {
       typewriterElement.innerHTML += `\n\n/* Starting ${currentBlock.tag.toUpperCase()} Code */`;
@@ -62,10 +72,13 @@ function typeNextChar() {
   const currentLine = currentBlock.code[currentLineIndex] || "";
   if (currentCharIndex < currentLine.length) {
     const char = currentLine[currentCharIndex];
-    if (currentLine.trim() === "(delay)") {
+
+    // Check for the custom delay marker
+    if (currentLine.includes("(PAUSE_HERE)")) {
+      console.log("Pause triggered");
       typewriterContext.currentLineIndex++;
       typewriterContext.currentCharIndex = 0;
-      typingInterval = setTimeout(typeNextChar, codeSwitchDelay);
+      setTimeout(typeNextChar, codeSwitchDelay);
       return;
     }
     if (currentCharIndex === 0) {
@@ -87,6 +100,7 @@ function typeNextChar() {
       typewriterElement.setAttribute("data-start", "1");
       Prism.highlightElement(typewriterElement);
     }
+
     if (currentBlock.tag === "html") {
       document.querySelector(".currentCode").textContent = "HTML";
       iframeDoc.body.innerHTML = typewriterElement.textContent;
@@ -96,7 +110,10 @@ function typeNextChar() {
       iframeDoc.head.appendChild(styleElement);
     } else if (currentBlock.tag === "js") {
       document.querySelector(".currentCode").textContent = "JavaScript";
-      if (currentLineIndex === currentBlock.code.length - 1 && currentCharIndex === currentLine.length - 1) {
+      if (
+        currentLineIndex === currentBlock.code.length - 1 &&
+        currentCharIndex === currentLine.length - 1
+      ) {
         const htmlContent = document.getElementById("htmlInput").value;
         iframeDoc.body.innerHTML = htmlContent;
 
@@ -162,6 +179,14 @@ function startTyping() {
     document.getElementById("codeSwitchDelay").value,
     10
   );
+  // Check if the delay is a valid number
+  if (isNaN(codeSwitchDelay) || codeSwitchDelay < 0) {
+    console.error("Invalid delay value");
+    return;
+  }
+  Prism.highlightAll(htmlCode);
+  Prism.highlightAll(cssCode);
+  Prism.highlightAll(jsCode);
   const typewriterElement = document.getElementById("typewriter");
   const livePreviewElement = document.getElementById("livePreview");
   typewriterElement.textContent = "";
@@ -197,6 +222,20 @@ function startTyping() {
   });
   typeNextChar();
 }
+
+// Listen for space bar keypress only when toggle mode is active
+document.addEventListener("keydown", (event) => {
+  const body = document.body;
+  if (event.code === "Space" && body.classList.contains("hidden-dashboard")) {
+    event.preventDefault();
+    toggleTyping();
+  }
+});
+document.querySelectorAll(".toggleDashboard").forEach((toggle) => {
+  toggle.addEventListener("click", () =>
+    toggleClass("body", "hidden-dashboard")
+  );
+});
 
 function toggleTyping() {
   const toggleButton = document.getElementById("stopBtn");
@@ -276,7 +315,7 @@ function toggleAutomaticHideOnTypingEnd() {
     console.log("Typing ended, running automatic hide");
     setTimeout(() => {
       toggleClass("#recordingSection", "automaticHide", true);
-    }, 1000);
+    }, 2000);
     setTimeout(() => {
       toggleClass("#recordingSection", "automaticHide", false);
     }, 5000);
@@ -292,11 +331,6 @@ document.querySelector(".hideTypeWriter").addEventListener("change", (e) => {
 
 document.querySelector(".hidetypingbox").addEventListener("change", (e) => {
   toggleClass("#recordingSection", "automaticHide", e.target.checked);
-});
-document.querySelectorAll(".toggleDashboard").forEach((toggle) => {
-  toggle.addEventListener("click", () =>
-    toggleClass("body", "hidden-dashboard")
-  );
 });
 
 document.querySelector(".settingBtn").addEventListener("click", (e) => {
@@ -397,4 +431,15 @@ function showAlert(message, type) {
       alertContainer.remove();
     }, 300);
   }, 2000);
+}
+function copyCode() {
+  const code = document.getElementById("typewriter").textContent;
+  navigator.clipboard.writeText(code).then(
+    () => {
+      showAlert("Code copied to clipboard", "success");
+    },
+    () => {
+      showAlert("Failed to copy code", "danger");
+    }
+  );
 }

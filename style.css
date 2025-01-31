@@ -6,6 +6,18 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
+label {
+  font-size: 14px;
+}
+
+input {
+  font-size: 14px !important;
+}
+
+button {
+  font-size: 14px !important;
+}
+
 .logo-text {
   font-family: poppins, sans-serif;
   font-weight: 600;
@@ -57,9 +69,11 @@ body {
 ::-webkit-scrollbar-corner {
   background: #f1f1f1;
 }
-.nav-cont{
+
+.nav-cont {
   padding: 0;
 }
+
 .form-check-container {
   display: flex;
   align-items: center;
@@ -74,6 +88,14 @@ body {
 
 .form-check-container:hover {
   background-color: #c4c0c0;
+}
+
+.form-range {
+  appearance: auto;
+}
+
+.form-control {
+  appearance: auto;
 }
 
 .form-check {
@@ -104,9 +126,9 @@ body {
 
 .setting-dashboard {
   position: absolute;
-  left: -400px;
+  left: -100%;
   width: 25%;
-   height: 100vh;
+  height: 100vh;
   transition: left 0.4s ease-in-out;
   overflow-y: auto;
   background-color: #e9ecef;
@@ -118,7 +140,6 @@ body {
 
 #dashboard {
   width: 25%;
-
   left: 0;
   transition: all 0.3s ease-in-out;
   height: 100vh;
@@ -138,7 +159,12 @@ body {
   margin-left: auto;
   margin-right: 20px;
 }
-
+.about {
+  font-size: 10px;
+  color: #555;
+  text-align: center;
+  margin-left: 25%;
+}
 .display-section {
   padding: 24px 16px 24px 16px;
   display: flex;
@@ -147,6 +173,7 @@ body {
   width: 100%;
   gap: 20px;
   transition: all 0.5s;
+  transition: flex-direction 0.5s;
 }
 
 #recordingSection {
@@ -174,15 +201,16 @@ body {
   min-height: 30vh;
   max-height: 40vh;
   color: black;
-  font-weight: 600;
+  font-weight: 500;
   background-color: #f1f1f1;
   font-family: Consolas, "Courier New", monospace;
-  font-size: 18px;
+  font-size: 20px;
   padding: 30px;
   border-radius: 10px 10px 8px 8px;
   padding-bottom: 50px;
   scroll-behavior: smooth;
-  transition: height 0.5s ease-in-out;
+  transition: height 0.5s ease-in-out, width 0.3s ease,
+    max-height 0.5s ease-in-out;
 }
 
 #typewriter.removeWordWrap {
@@ -209,16 +237,21 @@ body {
   max-height: 90vh;
   font-family: Arial, sans-serif;
   scroll-behavior: smooth;
-  transition: height 0.5s ease-in-out;
+  transition: height 0.5s ease-in-out, width 0.3s ease,
+    max-height 0.5s ease-in-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), 0 1px 6px rgba(0, 0, 0, 0.1),
+    0 8px 24px rgba(0, 0, 0, 0.1), 0 0 15px rgba(255, 175, 51, 0.2);
 }
 
 #livePreview.adding-border {
   border: none;
   background-color: transparent;
+  box-shadow: none;
 }
 
 .dark-mode #livePreview.adding-border {
   background-color: transparent;
+  box-shadow: none;
 }
 
 .recording-nav {
@@ -254,11 +287,11 @@ body {
 .hidden-dashboard #livePreview,
 .hidden-dashboard #typewriter {
   max-height: 100vh;
-  height: 80vh;
+  height: 85vh;
 }
 
 .hidden-dashboard #typewriter {
-  height: calc(80vh - 4vh);
+  height: calc(85vh - 4vh);
 }
 
 .automaticHide .iphone {
@@ -269,12 +302,26 @@ body {
 .automaticHide #livePreview {
   height: 80vh;
 }
+
+.hidden-dashboard .automaticHide .display-section {
+  flex-direction: column;
+  transition: flex-direction 0.5s;
+  width: 100%;
+}
+.hidden-dashboard .automaticHide .display-section #livePreview {
+  height: 85vh;
+  width: 100vw;
+}
+
 .iphone {
   width: 350px;
-  transition: transform 0.5s, scale 0.5s;
+  transition: transform 0.5s, scale 0.5s, width 0.3s ease,
+    height 0.5s ease-in-out, max-height 0.5s ease-in-out;
   transform: translateY(0);
   border: 1px solid #6c757d;
   background-color: black;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), 0 1px 6px rgba(0, 0, 0, 0.1),
+    0 8px 24px rgba(0, 0, 0, 0.1), 0 0 15px rgba(255, 175, 51, 0.2);
 }
 
 .color {
@@ -312,17 +359,23 @@ body {
   font-size: 12px;
   margin-left: 10px;
 }
-
+.copycode {
+  color: white;
+  font-size: 12px;
+  margin-left: auto;
+  cursor: pointer;
+}
 #editeditor {
   color: white;
   font-size: 12px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  margin-left: auto;
+  margin-left: 5px;
 }
 
-#editeditor:hover {
+#editeditor:hover,
+.copycode:hover {
   color: #bcc1bc;
+  transition: all 0.2s ease-in-out;
 }
 
 #editeditor:focus {
@@ -420,6 +473,12 @@ body {
   color: #ffffff;
 }
 
+.dark-mode .iphone,
+.dark-mode #livePreview {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 1px 6px rgba(0, 0, 0, 0.4),
+    0 8px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
 .alert-container {
   padding: 10px;
   display: flex;
@@ -441,23 +500,17 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
-/* Increase contrast for dark mode */
-.dark-mode pre[class*="language-"],
-.dark-mode code[class*="language-"] {
-  background: #1e1e1e !important; /* Darker background */
-  color: #ffffff !important; /* Brighter text */
-}
 
-/* Make syntax highlighting more vibrant */
 .dark-mode .token.comment,
 .dark-mode .token.prolog,
 .dark-mode .token.doctype,
 .dark-mode .token.cdata {
-  color: #7f848e !important; /* Brighter comments */
+  color: #46b948 !important;
+  font-style: italic;
 }
 
 .dark-mode .token.punctuation {
-  color: #ffffff !important; /* Pure white punctuation */
+  color: #b8b8b8 !important;
 }
 
 .dark-mode .token.property,
@@ -466,26 +519,49 @@ body {
 .dark-mode .token.number,
 .dark-mode .token.constant,
 .dark-mode .token.symbol {
-  color: #ff79c6 !important; /* Bright pink */
+  color: #7fc0e8 !important;
 }
 
-.dark-mode .token.selector,
 .dark-mode .token.string,
 .dark-mode .token.char,
 .dark-mode .token.builtin,
 .dark-mode .token.inserted {
-  color: #50fa7b !important; /* Bright green */
+  color: #50fa7b !important;
 }
 
-.dark-mode .token.operator,
+.dark-mode .token.string {
+  color: #ff9367 !important;
+}
+
+.dark-mode .token.selector {
+  color: #f5d11c !important;
+}
+
 .dark-mode .token.entity,
 .dark-mode .token.url,
 .dark-mode .token.variable {
-  color: #f8f8f2 !important; /* Default white */
+  color: #f8f8f2 !important;
+}
+
+.dark-mode .token.operator {
+  color: rgb(101, 162, 255);
 }
 
 .dark-mode .token.atrule,
-.dark-mode .token.attr-value,
 .dark-mode .token.keyword {
-  color: #ffb86c !important; /* Bright orange */
+  color: rgb(114 171 255);
+}
+
+.dark-mode .token.attr-value {
+  color: #ff9367 !important;
+}
+
+.dark-mode .token.attr-name {
+  color: #b9fafa !important;
+}
+
+.token.variable,
+.token.function,
+.token.identifier {
+  color: #9cdcfe !important;
 }

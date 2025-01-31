@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,16 +8,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
- <!-- Prism.js Light Theme (Default) -->
-<link id="prismTheme" rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.css">
+  <!-- Prism.js Light Theme (Default) -->
+  <link id="prismTheme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.css" />
 
-<!-- Prism.js Higher Contrast Dark Theme -->
-<link id="prismDarkTheme" rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow-night-bright.min.css"
-disabled>
-
-
+  <!-- Prism.js Higher Contrast Dark Theme -->
+  <link id="prismDarkTheme" rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow-night-bright.min.css" disabled />
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css"
@@ -43,11 +40,9 @@ disabled>
           <button class="btn btn-sm btn-primary toggleDashboard cursor-pointer">
             <i class="bi bi-list"></i>
           </button>
-
           <button class="settingBtn btn btn-sm btn-primary cursor-pointer">
             <i class="bi bi-gear-fill"></i>
           </button>
-
           <div class="form-check form-switch">
             <input type="checkbox" class="form-check-input darkMode" />
             <label for="darkMode" class="form-check-label"><i class="bi bi-brightness-high-fill"></i></label>
@@ -100,7 +95,7 @@ disabled>
         </div>
         <div class="form-group mb-3">
           <label for="fontControl">Adjust Font</label>
-          <input type="range" id="fontControl" class="form-range" min="16" max="50" value="18" />
+          <input type="range" id="fontControl" class="form-range" min="16" max="50" value="20" />
         </div>
         <div class="form-group mb-3">
           <label for="widthControl">Adjust Width</label>
@@ -108,7 +103,7 @@ disabled>
         </div>
         <div class="form-group mb-3">
           <label for="realTimeSpeed">Real-Time Typing Speed</label>
-          <input type="range" id="realTimeSpeed" class="form-range" min="2" max="800" value="100" />
+          <input type="range" id="realTimeSpeed" class="form-range" min="1" max="800" value="100" />
         </div>
 
         <div class="form-group mb-3">
@@ -117,7 +112,7 @@ disabled>
         </div>
         <div class="form-group mb-3">
           <label for="codeSwitchDelay">Delay Between Code (ms)</label>
-          <input type="number" id="codeSwitchDelay" class="form-control" value="500" />
+          <input type="number" id="codeSwitchDelay" class="form-control" value="1000" />
         </div>
         <div class="form-group mb-3 d-flex align-items-center justify-content-between">
           <label for="bgColor">Background Color</label>
@@ -133,6 +128,7 @@ disabled>
           </button>
         </div>
       </div>
+      <span class="about">Design & developed by Sonu Kumar</span>
     </div>
 
     <!-- Recording Section -->
@@ -163,6 +159,9 @@ disabled>
             <div class="circle yellow"></div>
             <div class="circle green"></div>
             <div class="currentCode ml-3"></div>
+            <div class="copycode" onclick="copyCode()">
+              <i class="bi bi-copy"></i>
+            </div>
             <i id="editeditor" class="bi bi-pencil-square float-end"></i>
           </div>
           <div id="typewriter" contenteditable="false" class="typewriter"></div>
@@ -173,4 +172,5 @@ disabled>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="script.js"></script>
 </body>
+
 </html>
