@@ -6,7 +6,6 @@ let typeSpeed = 100;
 let width = 500;
 let font = 18;
 showAlert("Welcome to CodePen Clone", "success");
-
 document
   .getElementById("realTimeSpeed")
   .addEventListener("input", updateTypingSpeed);
@@ -19,7 +18,6 @@ document.querySelectorAll(".stopBtn").forEach((button) => {
   button.addEventListener("click", toggleTyping);
 });
 document.getElementById("bgColor").addEventListener("input", updateBackground);
-
 function checkContent() {
   const htmlContent = document.getElementById("htmlInput").value.trim();
   const cssContent = document.getElementById("cssInput").value.trim();
@@ -28,12 +26,10 @@ function checkContent() {
     button.disabled = !(htmlContent || cssContent || jsContent);
   });
 }
-
 document.getElementById("htmlInput").addEventListener("input", checkContent);
 document.getElementById("cssInput").addEventListener("input", checkContent);
 document.getElementById("jsInput").addEventListener("input", checkContent);
 checkContent();
-
 function typeNextChar() {
   if (!typewriterContext || paused) return;
   const {
@@ -46,19 +42,15 @@ function typeNextChar() {
     styleElement,
     codeSwitchDelay,
   } = typewriterContext;
-
   const currentBlock = allCode[currentBlockIndex];
   if (!currentBlock) {
     isTyping = false;
-
     document.querySelectorAll(".stopBtn").forEach((button) => {
       button.disabled = true;
       button.textContent = "Pause";
     });
-
     return;
   }
- 
   if (currentLineIndex === 0 && currentCharIndex === 0 && currentBlockIndex > 0) {
     const previousBlock = allCode[currentBlockIndex - 1];
     if (previousBlock.code.length > 0) {
@@ -67,18 +59,15 @@ function typeNextChar() {
       typewriterElement.scrollTo(0, typewriterElement.scrollHeight);
     }
   }
-  
   const currentLine = currentBlock.code[currentLineIndex] || "";
   if (currentCharIndex < currentLine.length) {
     const char = currentLine[currentCharIndex];
-
     if (currentLine.trim() === "(delay)") {
       typewriterContext.currentLineIndex++;
       typewriterContext.currentCharIndex = 0;
       typingInterval = setTimeout(typeNextChar, codeSwitchDelay);
       return;
     }
-
     if (currentCharIndex === 0) {
       typewriterElement.textContent +=
         "\n" + currentLine.slice(0, currentCharIndex + 1);
@@ -86,11 +75,9 @@ function typeNextChar() {
       typewriterElement.textContent += char;
       Prism.highlightElement(typewriterElement);
     }
-
     const iframeDoc =
       livePreviewElement.contentDocument ||
       livePreviewElement.contentWindow.document;
-
     if (
       currentBlock.tag === "html" ||
       currentBlock.tag === "css" ||
@@ -100,7 +87,6 @@ function typeNextChar() {
       typewriterElement.setAttribute("data-start", "1");
       Prism.highlightElement(typewriterElement);
     }
- 
     if (currentBlock.tag === "html") {
       document.querySelector(".currentCode").textContent = "HTML";
       iframeDoc.body.innerHTML = typewriterElement.textContent;
@@ -144,7 +130,6 @@ function typeNextChar() {
         }
       }
     }
-
     typewriterElement.scrollTo(0, typewriterElement.scrollHeight);
     livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
     typewriterContext.currentCharIndex++;
@@ -155,13 +140,11 @@ function typeNextChar() {
     if (typewriterContext.currentLineIndex >= currentBlock.code.length) {
       typewriterContext.currentBlockIndex++;
       typewriterContext.currentLineIndex = 0;
-      return;
     }
     typingInterval = setTimeout(typeNextChar, typeSpeed);
   }
   toggleAutomaticHideOnTypingEnd();
 }
-
 function startTyping() {
   if (isTyping) return;
   isTyping = true;
@@ -172,7 +155,6 @@ function startTyping() {
   typewriter.textContent = "";
   document.querySelector("#editeditor").style.color = "white";
   typewrite.contentEditable = false;
-
   const htmlCode = document.getElementById("htmlInput").value.split("\n");
   const cssCode = document.getElementById("cssInput").value.split("\n");
   const jsCode = document.getElementById("jsInput").value.split("\n");
@@ -180,28 +162,16 @@ function startTyping() {
     document.getElementById("codeSwitchDelay").value,
     10
   );
-
   const typewriterElement = document.getElementById("typewriter");
   const livePreviewElement = document.getElementById("livePreview");
-
   typewriterElement.textContent = "";
-
   const iframeDoc =
     livePreviewElement.contentDocument ||
     livePreviewElement.contentWindow.document;
   iframeDoc.open();
-  iframeDoc.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"><style>body{padding:20px 0px 20px 0px;}
-         body::-webkit-scrollbar{display: none;}<style>
-        </head>
-        <body></body>
-      </html>
-    `);
+  iframeDoc.write(
+    ` <!DOCTYPE html> <html> <head> <meta name="viewport" content="width=device-width, initial-scale=1"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer"/> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"><style>body{padding:20px 0px 20px 0px;} body::-webkit-scrollbar{display: none;}<style> </head> <body></body> </html> `
+  );
   iframeDoc.close();
   let allCode = [
     { tag: "html", code: htmlCode },
@@ -221,12 +191,10 @@ function startTyping() {
     cssContent: "",
     jsContent: "",
   };
-
   iframeDoc.head.appendChild(typewriterContext.styleElement);
   document.querySelectorAll(".stopBtn").forEach((button) => {
     button.disabled = false;
   });
-
   typeNextChar();
 }
 
@@ -355,17 +323,16 @@ function toggleDarkMode() {
   toggleClass("body", "dark-mode");
   const isDarkMode = document.body.classList.contains("dark-mode");
   localStorage.setItem("darkMode", isDarkMode);
-    // Prism theme switch
-    const prismTheme = document.getElementById("prismTheme");
-    const prismDarkTheme = document.getElementById("prismDarkTheme");
-  
-    if (isDarkMode) {
-      prismTheme.disabled = true;
-      prismDarkTheme.disabled = false;
-    } else {
-      prismTheme.disabled = false;
-      prismDarkTheme.disabled = true;
-    }
+  const prismTheme = document.getElementById("prismTheme");
+  const prismDarkTheme = document.getElementById("prismDarkTheme");
+
+  if (isDarkMode) {
+    prismTheme.disabled = true;
+    prismDarkTheme.disabled = false;
+  } else {
+    prismTheme.disabled = false;
+    prismDarkTheme.disabled = true;
+  }
   document.querySelectorAll(".darkMode").forEach((toggle) => {
     toggle.checked = isDarkMode;
   });
@@ -374,9 +341,8 @@ function toggleDarkMode() {
 function loadDarkModeState() {
   const isDarkMode = localStorage.getItem("darkMode") === "true";
   toggleClass("body", "dark-mode", isDarkMode);
-   // Toggle Prism Theme on load
-   document.getElementById("prismTheme").disabled = isDarkMode;
-   document.getElementById("prismDarkTheme").disabled = !isDarkMode;
+  document.getElementById("prismTheme").disabled = isDarkMode;
+  document.getElementById("prismDarkTheme").disabled = !isDarkMode;
   document.querySelectorAll(".darkMode").forEach((toggle) => {
     toggle.checked = isDarkMode;
   });

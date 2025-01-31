@@ -80,5 +80,5 @@ Contributions are welcome! Please open an issue first to discuss proposed change
 
 ---
 
-Made with ❤️ by [sonu kumar]  
+Made with ❤️ by sonu kumar 
 
