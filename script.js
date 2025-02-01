@@ -158,7 +158,8 @@ function typeNextChar() {
       typewriterContext.currentBlockIndex++;
       typewriterContext.currentLineIndex = 0;
     }
-    typingInterval = setTimeout(typeNextChar, typeSpeed);
+    Prism.highlightElement(typewriterElement);
+    typingInterval = requestAnimationFrame(typeNextChar, typeSpeed);
   }
   toggleAutomaticHideOnTypingEnd();
 }
@@ -239,14 +240,10 @@ document.querySelectorAll(".toggleDashboard").forEach((toggle) => {
 document.querySelector("#expand-dashboard").addEventListener("click", () => {
   toggleClass("body", "ex-dashboard");
   const icon = document.querySelector("#expand-dashboard i");
-  if (document.body.classList.contains("ex-dashboard")) {
-    icon.className = "bi bi-arrow-left-circle-fill float-end"; 
-  } else {
-    icon.className = "bi bi-arrow-right-circle-fill float-end";
-  }
+  icon.className = document.body.classList.contains("ex-dashboard")
+    ? "bi bi-arrow-left-circle-fill float-end"
+    : "bi bi-arrow-right-circle-fill float-end";
 });
-
-
 
 function toggleTyping() {
   const toggleButton = document.getElementById("stopBtn");
@@ -279,8 +276,8 @@ document.querySelectorAll(".stopBtn").forEach((button) => {
 });
 
 function updateBackground() {
-  const color = document.getElementById("bgColor").value;
-  document.getElementById("recordingSection").style.backgroundColor = color;
+  document.getElementById("recordingSection").style.backgroundColor =
+    document.getElementById("bgColor").value;
 }
 
 function updateTypingSpeed() {
@@ -289,9 +286,9 @@ function updateTypingSpeed() {
 }
 
 function updateWidth() {
-  let width = parseInt(document.getElementById("widthControl").value);
-  document.getElementById("livePreview").style.width = width + "%";
-  document.querySelector(".iphone").style.width = width + "%";
+  const width = `${parseInt(document.getElementById("widthControl").value)}%`;
+  document.getElementById("livePreview").style.width = width;
+  document.querySelector(".iphone").style.width = width;
 }
 
 function updateFont() {
@@ -346,12 +343,8 @@ document.querySelector(".hidetypingbox").addEventListener("change", (e) => {
 
 document.querySelector(".settingBtn").addEventListener("click", (e) => {
   const button = e.currentTarget;
-
-  if (button.style.backgroundColor === "red") {
-    button.style.backgroundColor = "";
-  } else {
-    button.style.backgroundColor = "red";
-  }
+  button.style.backgroundColor =
+    button.style.backgroundColor === "red" ? "" : "red";
   toggleClass(".setting-dashboard", "show");
   toggleClass("body", "dashboard-hidden");
 });
@@ -368,19 +361,11 @@ function toggleDarkMode() {
   toggleClass("body", "dark-mode");
   const isDarkMode = document.body.classList.contains("dark-mode");
   localStorage.setItem("darkMode", isDarkMode);
-  const prismTheme = document.getElementById("prismTheme");
-  const prismDarkTheme = document.getElementById("prismDarkTheme");
-
-  if (isDarkMode) {
-    prismTheme.disabled = true;
-    prismDarkTheme.disabled = false;
-  } else {
-    prismTheme.disabled = false;
-    prismDarkTheme.disabled = true;
-  }
-  document.querySelectorAll(".darkMode").forEach((toggle) => {
-    toggle.checked = isDarkMode;
-  });
+  document.getElementById("prismTheme").disabled = isDarkMode;
+  document.getElementById("prismDarkTheme").disabled = !isDarkMode;
+  document
+    .querySelectorAll(".darkMode")
+    .forEach((toggle) => (toggle.checked = isDarkMode));
 }
 
 function loadDarkModeState() {
@@ -388,28 +373,21 @@ function loadDarkModeState() {
   toggleClass("body", "dark-mode", isDarkMode);
   document.getElementById("prismTheme").disabled = isDarkMode;
   document.getElementById("prismDarkTheme").disabled = !isDarkMode;
-  document.querySelectorAll(".darkMode").forEach((toggle) => {
-    toggle.checked = isDarkMode;
-  });
+  document
+    .querySelectorAll(".darkMode")
+    .forEach((toggle) => (toggle.checked = isDarkMode));
 }
 
-document.querySelectorAll(".darkMode").forEach((toggle) => {
-  toggle.addEventListener("change", toggleDarkMode);
-});
+document
+  .querySelectorAll(".darkMode")
+  .forEach((toggle) => toggle.addEventListener("change", toggleDarkMode));
 loadDarkModeState();
 
 document.querySelector("#editeditor").addEventListener("click", (e) => {
   const typewriter = document.querySelector("#typewriter");
-
-  if (typewriter.contentEditable === "false") {
-    typewriter.contentEditable = "true";
-    e.target.style.color = "red";
-    paused = true;
-  } else {
-    typewriter.contentEditable = "false";
-    e.target.style.color = "white";
-    paused = false;
-  }
+  typewriter.contentEditable = typewriter.contentEditable === "false";
+  e.target.style.color = typewriter.contentEditable ? "red" : "white";
+  paused = typewriter.contentEditable;
 });
 
 function clickonEdit() {
@@ -425,32 +403,30 @@ function showAlert(message, type) {
   const alertContainer = document.createElement("div");
   alertContainer.className = `alert alert-${type} alert-dismissible fade show alert-container`;
   alertContainer.role = "alert";
-  alertContainer.innerHTML = `
-  <span>${message}</span>
-  `;
-
+  alertContainer.innerHTML = `<span>${message}</span>`;
   document.body.appendChild(alertContainer);
   alertContainer.style.transform = "translateX(-50%) scale(0)";
   setTimeout(() => {
     alertContainer.style.transition = "transform 0.3s ease-in-out";
     alertContainer.style.transform = "translateX(-50%) scale(1)";
   }, 10);
-
   setTimeout(() => {
     alertContainer.style.transform = "translateX(-50%) scale(0)";
-    setTimeout(() => {
-      alertContainer.remove();
-    }, 300);
+    setTimeout(() => alertContainer.remove(), 300);
   }, 2000);
 }
+
 function copyCode() {
-  const code = document.getElementById("typewriter").textContent;
-  navigator.clipboard.writeText(code).then(
-    () => {
-      showAlert("Code copied to clipboard", "success");
-    },
-    () => {
-      showAlert("Failed to copy code", "danger");
-    }
+  navigator.clipboard
+    .writeText(document.getElementById("typewriter").textContent)
+    .then(
+      () => showAlert("Code copied to clipboard", "success"),
+      () => showAlert("Failed to copy code", "danger")
+    );
+}
+function copyPause() {
+  navigator.clipboard.writeText("(PAUSE_HERE)").then(
+    () => showAlert("PAUSE_HERE copied to clipboard", "success"),
+    () => showAlert("Failed to copy PAUSE_HERE", "danger")
   );
 }

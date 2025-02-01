@@ -1,21 +1,45 @@
 @import url("https://fonts.googleapis.com/css2?family=Consolas&display=swap");
 
+:root {
+  --bg-primary: #e9ecef;
+  --bg-secondary: #092c4f;
+  --bg-scrollbar: #888;
+  --bg-scrollbar-hover: #555;
+  --bg-scrollbar-corner: #f1f1f1;
+  --bg-light: #f8f9fa;
+  --bg-dark: #121212;
+  --text-color-dark: #ffffff;
+  --text-color-light: #838080;
+  --text-color-button-hover: #bcc1bc;
+  --placeholder-color: #b0b0b0;
+  --inputbg-color: #2e2e2e;
+  --bg-typelive: #f1f1f1;
+}
+
+.dark-mode {
+  --bg-primary: #1e1e1e;
+  --bg-dark: #1e1e1e;
+  --bg-light: #2c2c2c;
+  --bg-scrollbar: #6c6e6d;
+  --text-color-light: #ffffff;
+  --inputbg-color: #2e2e2e;
+  --bg-typelive: #2c2c2c;
+}
+
 body {
   overflow-x: hidden;
   overflow-y: hidden;
   transition: background-color 0.3s, color 0.3s;
 }
 
-label {
-  font-size: 14px;
-}
-
-input {
-  font-size: 14px !important;
-}
-
+label,
+input,
 button {
   font-size: 14px !important;
+}
+
+hr {
+  margin: 0;
 }
 
 .logo-text {
@@ -29,13 +53,13 @@ button {
   align-items: center;
   justify-content: center;
   margin-left: 8px;
-  padding: 2px 8px 2px 8px;
+  padding: 2px 8px;
   border-radius: 5px;
   transition: all 0.3s ease-in-out;
 }
 
 .logo-container:hover {
-  background-color: #092c4f;
+  background-color: var(--bg-secondary);
 }
 
 * {
@@ -57,17 +81,24 @@ button {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: var(--bg-scrollbar);
   border-radius: 10px;
   cursor: pointer;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--bg-scrollbar-hover);
 }
 
 ::-webkit-scrollbar-corner {
-  background: #f1f1f1;
+  background: var(--bg-scrollbar-corner);
+}
+
+#dashnav {
+  position: sticky;
+  top: 0;
+  z-index: 14;
+  background-color: var(--bg-primary);
 }
 
 .nav-cont {
@@ -90,10 +121,7 @@ button {
   background-color: #c4c0c0;
 }
 
-.form-range {
-  appearance: auto;
-}
-
+.form-range,
 .form-control {
   appearance: auto;
 }
@@ -124,19 +152,24 @@ button {
   overflow: auto;
 }
 
+.settingBtn {
+  margin: 0 auto 0 10px;
+}
+
 .setting-dashboard {
   position: absolute;
   left: -100%;
   width: 25%;
   height: 100vh;
-  transition: left 0.4s ease-in-out;
   overflow-y: auto;
-  background-color: #e9ecef;
+  background-color: var(--bg-primary);
+  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s;
+  will-change: left;
 }
 
 .setting-dashboard.show {
   left: 0;
-  z-index: 99;
+  z-index: 9;
 }
 
 #dashboard {
@@ -145,31 +178,44 @@ button {
   transition: all 0.3s ease-in-out;
   height: 100vh;
   overflow-y: auto;
-  background-color: #e9ecef;
+  background-color: var(--bg-primary);
 }
 
 .dashboard-hidden #dashboard {
   overflow: hidden;
+  scrollbar-gutter: stable;
 }
-.main-dashboard{
-   transition: filter 0.5s ease;
+
+.main-dashboard {
+  transition: filter 0.3s ease;
 }
-.dashboard-hidden .main-dashboard{
-   filter: blur(5px);
-  
-   z-index: 90;
+
+.dashboard-hidden .main-dashboard {
+  filter: blur(5px);
+  pointer-events: none;
+  z-index: 10;
 }
-.ex-dashboard #dashboard{
+
+.ex-dashboard #dashboard {
   width: 50%;
 }
-#expand-dashboard{
-  cursor: pointer; transition: all 0.2s ease-in-out;
-}
-#expand-dashboard:hover{
+
+#expand-dashboard,
+#copypause {
   cursor: pointer;
-  color: #bcc1bc;
- 
+  transition: all 0.2s ease-in-out;
+  font-size: 15px;
 }
+
+#copypause {
+  margin: 0 10px 0 auto;
+}
+
+#expand-dashboard:hover {
+  cursor: pointer;
+  color: var(--text-color-button-hover);
+}
+
 .start-stopbtn {
   display: flex;
   align-items: center;
@@ -178,20 +224,20 @@ button {
   margin-left: auto;
   margin-right: 20px;
 }
+
 .about {
   font-size: 10px;
   color: #555;
-  
 }
+
 .display-section {
-  padding: 24px 16px 24px 16px;
+  padding: 24px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   gap: 20px;
-  transition: all 0.5s;
-  transition: flex-direction 0.5s;
+  transition: all 0.5s, flex-direction 0.5s;
 }
 
 #recordingSection {
@@ -201,12 +247,14 @@ button {
   width: calc(100% - 25%);
   transition: all 0.3s ease-in-out;
   height: 100vh;
-  background-color: #f8f9fa;
-  z-index: 10;
+  background-color: var(--bg-light);
+  z-index: 15;
 }
-.ex-dashboard #recordingSection{
+
+.ex-dashboard #recordingSection {
   width: 50%;
 }
+
 #typewriter::-webkit-scrollbar,
 #livePreview::-webkit-scrollbar {
   display: none;
@@ -222,7 +270,7 @@ button {
   max-height: 40vh;
   color: black;
   font-weight: 500;
-  background-color: #f1f1f1;
+  background-color: var(--bg-typelive);
   font-family: Consolas, "Courier New", monospace;
   font-size: 20px;
   padding: 30px;
@@ -231,7 +279,6 @@ button {
   scroll-behavior: smooth;
   transition: height 0.5s ease-in-out, width 0.3s ease,
     max-height 0.5s ease-in-out;
-    
 }
 
 #typewriter.removeWordWrap {
@@ -244,7 +291,7 @@ button {
 }
 
 #livePreview {
-  width:35%;
+  width: 35%;
   max-width: 100%;
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -253,15 +300,16 @@ button {
   border: 1px solid #6c757d;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: #f1f1f1;
+  background-color: var(--bg-typelive);
   height: 40vh;
   max-height: 90vh;
   font-family: Arial, sans-serif;
   scroll-behavior: smooth;
-  transition: height 0.5s ease-in-out, width 0.3s ease,
-    max-height 0.5s ease-in-out;
+  transition: height 0.5s ease-in-out, width 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), 0 1px 6px rgba(0, 0, 0, 0.1),
     0 8px 24px rgba(0, 0, 0, 0.1), 0 0 15px rgba(255, 175, 51, 0.2);
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 #livePreview.adding-border {
@@ -279,6 +327,9 @@ button {
   display: none;
   position: sticky;
   top: 0;
+  background-color: var(--bg-primary);
+  z-index: 20;
+  margin-bottom: 20px;
 }
 
 .hidden-dashboard .recording-nav {
@@ -289,7 +340,7 @@ button {
   flex-direction: row;
   justify-content: center;
   gap: 20px;
-  padding-top: 0px;
+  padding-top: 0;
 }
 
 .hidden-dashboard #dashboard {
@@ -308,12 +359,11 @@ button {
 .hidden-dashboard #livePreview,
 .hidden-dashboard #typewriter {
   max-height: 100vh;
-  height: 85vh;
+  height: 84vh;
 }
 
 .hidden-dashboard #typewriter {
-  height: calc(85vh - 4vh);
-  
+  height: calc(84vh - 4vh);
 }
 
 .automaticHide .iphone {
@@ -322,7 +372,7 @@ button {
 }
 
 .automaticHide #livePreview {
-  height: 80vh;
+  height: 100vh;
 }
 
 .hidden-dashboard .automaticHide .display-section {
@@ -330,10 +380,10 @@ button {
   transition: flex-direction 0.5s;
   width: 100%;
 }
-.hidden-dashboard .automaticHide .display-section #livePreview {
-  height: 85vh;
-  width: 100vw;
 
+.hidden-dashboard .automaticHide .display-section #livePreview {
+  height: 100vh;
+  width: 100vw;
 }
 
 .iphone {
@@ -345,17 +395,16 @@ button {
   background-color: black;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), 0 1px 6px rgba(0, 0, 0, 0.1),
     0 8px 24px rgba(0, 0, 0, 0.1), 0 0 15px rgba(255, 175, 51, 0.2);
-   
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .color {
   display: flex;
-
   justify-content: center;
   align-items: center;
-  padding: 0px 10px 0px 10px;
+  padding: 0px 10px;
   gap: 5px;
-
   background-color: black;
   height: 4vh;
 }
@@ -383,12 +432,14 @@ button {
   font-size: 12px;
   margin-left: 10px;
 }
+
 .copycode {
   color: white;
   font-size: 12px;
   margin-left: auto;
   cursor: pointer;
 }
+
 #editeditor {
   color: white;
   font-size: 12px;
@@ -397,8 +448,9 @@ button {
 }
 
 #editeditor:hover,
-.copycode:hover {
-  color: #bcc1bc;
+.copycode:hover,
+#copypause:hover {
+  color: var(--text-color-button-hover);
   transition: all 0.2s ease-in-out;
 }
 
@@ -407,8 +459,8 @@ button {
 }
 
 .dark-mode {
-  background-color: #121212;
-  color: #ffffff;
+  background-color: var(--bg-dark);
+  color: var(--text-color-dark);
 }
 
 .dark-mode .form-check-container:hover {
@@ -416,85 +468,53 @@ button {
 }
 
 .dark-mode .form-check-input {
-  background-color: #6c6e6d !important;
+  background-color: var(--bg-scrollbar) !important;
 }
 
-.dark-mode #dashboard {
-  background-color: #1e1e1e;
-}
-
+.dark-mode #dashboard,
+.dark-mode #dashnav,
 .dark-mode .setting-dashboard {
-  background-color: #1e1e1e;
+  background-color: var(--bg-dark);
 }
 
 .dark-mode #recordingSection {
   background-color: black;
 }
 
-.dark-mode #typewriter {
-  background-color: #2c2c2c;
-  color: #ffffff;
-}
-
+.dark-mode #typewriter,
 .dark-mode #livePreview {
-  background-color: #2c2c2c;
+  background-color: var(--bg-typelive);
+  color: var(--text-color-light);
 }
 
-.dark-mode textarea {
-  background-color: #2c2c2c;
-  color: #ffffff;
-}
-
-.dark-mode textarea::placeholder {
-  color: #838080;
-}
-
-.dark-mode input {
-  background-color: #2c2c2c;
-  color: #ffffff;
-}
-
+.dark-mode textarea::placeholder,
 .dark-mode input::placeholder {
-  color: #838080;
+  color: var(--placeholder-color);
 }
 
-.dark-mode input:focus {
-  border-color: #00ff00;
-  background-color: #2c2c2c;
-  color: #ffffff;
-}
-
+.dark-mode input:focus,
 .dark-mode input:active {
-  border-color: #00ff00;
-  background-color: #2c2c2c;
-  color: #ffffff;
+  border-color: var(--text-color-dark);
 }
 
 .dark-mode #htmlInput,
 .dark-mode #cssInput,
-.dark-mode #jsInput {
-  background-color: #2c2c2c;
-  color: #ffffff;
+.dark-mode #jsInput,
+.dark-mode textarea,
+.dark-mode input {
+  background-color: var(--inputbg-color);
+  color: var(--text-color-light);
 }
-
 .dark-mode #toggleDashboard {
-  background-color: #1e1e1e;
-  color: #ffffff;
+  background-color: var(--bg-dark);
+  color: var(--text-color-dark);
 }
 
-.dark-mode #toggleDashboard:hover {
-  background-color: #1e1e1e;
-  color: #ffffff;
-}
-
-.dark-mode #toggleDashboard:active {
-  background-color: #1e1e1e;
-  color: #ffffff;
-}
-
+.dark-mode #toggleDashboard:hover,
+.dark-mode #toggleDashboard:active,
 .dark-mode #toggleDashboard:focus {
-  background-color: #1e1e1e;
-  color: #ffffff;
+  background-color: var(--bg-dark);
+  color: var(--text-color-dark);
 }
 
 .dark-mode .iphone,
