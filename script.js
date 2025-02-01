@@ -7,20 +7,19 @@ let width = 35;
 let font = 20;
 
 const editor = document.getElementById("typewriter");
-editor.addEventListener("input", () => {
-  Prism.highlightAll();
-});
+
 showAlert("Welcome to CodePen Clone", "success");
 document
   .getElementById("realTimeSpeed")
   .addEventListener("input", updateTypingSpeed);
 document.getElementById("widthControl").addEventListener("input", updateWidth);
 document.getElementById("fontControl").addEventListener("input", updateFont);
-document.querySelectorAll(".startBtn").forEach((button) => {
-  button.addEventListener("click", startTyping);
-});
-document.querySelectorAll(".stopBtn").forEach((button) => {
-  button.addEventListener("click", toggleTyping);
+document.body.addEventListener("click", function (event) {
+  if (event.target.classList.contains("startBtn")) {
+    startTyping();
+  } else if (event.target.classList.contains("stopBtn")) {
+    toggleTyping();
+  }
 });
 document.getElementById("bgColor").addEventListener("input", updateBackground);
 function checkContent() {
@@ -96,8 +95,12 @@ function typeNextChar() {
       currentBlock.tag === "css" ||
       currentBlock.tag === "js"
     ) {
+      const removeWordWrapClass =
+        typewriterElement.classList.contains("removeWordWrap");
       typewriterElement.className = `language-${currentBlock.tag} line-numbers`;
-      typewriterElement.setAttribute("data-start", "1");
+      if (removeWordWrapClass) {
+        typewriterElement.classList.add("removeWordWrap");
+      }
       Prism.highlightElement(typewriterElement);
     }
 
@@ -385,9 +388,15 @@ loadDarkModeState();
 
 document.querySelector("#editeditor").addEventListener("click", (e) => {
   const typewriter = document.querySelector("#typewriter");
-  typewriter.contentEditable = typewriter.contentEditable === "false";
-  e.target.style.color = typewriter.contentEditable ? "red" : "white";
-  paused = typewriter.contentEditable;
+  if (typewriter.contentEditable === "false") {
+    typewriter.contentEditable = "true";
+    e.target.style.color = "red";
+    paused = true;
+  } else {
+    typewriter.contentEditable = "false";
+    e.target.style.color = "";
+    paused = false;
+  }
 });
 
 function clickonEdit() {
@@ -430,3 +439,11 @@ function copyPause() {
     () => showAlert("Failed to copy PAUSE_HERE", "danger")
   );
 }
+document.addEventListener("dblclick", function () {
+  let dashboardHidden = document.querySelector(".hidden-dashboard");
+  let recordingSection = document.querySelector("#recordingSection");
+  if (dashboardHidden) {
+    document.body.classList.toggle("noselect");
+    recordingSection.classList.toggle("fullscreen");
+  }
+});

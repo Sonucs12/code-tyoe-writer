@@ -1,0 +1,271 @@
+.dark-mode {
+  --bg-primary: #1e1e1e;
+  --bg-dark: #1e1e1e;
+  --bg-light: #2c2c2c;
+  --bg-scrollbar: #6c6e6d;
+  --text-color-light: #ffffff;
+  --inputbg-color: #2e2e2e;
+  --bg-typelive: #2c2c2c;
+  --text-color-button-hover: #0af00a;
+}
+
+body.noselect {
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.setting-dashboard.show {
+  left: 0;
+  z-index: 9;
+}
+
+.dashboard-hidden #dashboard {
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+
+.dashboard-hidden .main-dashboard {
+  filter: blur(5px);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.ex-dashboard #dashboard {
+  width: 50%;
+}
+
+.ex-dashboard #recordingSection {
+  width: 50%;
+}
+#typewriter.removeWordWrap {
+  overflow-wrap: normal;
+  overflow-x: auto;
+}
+#livePreview.adding-border {
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.dark-mode #livePreview.adding-border {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.hidden-dashboard .recording-nav {
+  display: flex;
+
+  transform: translateY(0px);
+}
+.fullscreen .recording-nav {
+  position: relative;
+  visibility: hidden;
+  animation: slide-down 0.5s ease forwards;
+}
+@keyframes slide-down {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-100px);
+  }
+  100% {
+    display: none;
+  }
+}
+
+.hidden-dashboard .display-section {
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  padding-top: 0;
+}
+
+.hidden-dashboard #dashboard {
+  transition: all 0.3s ease-in-out;
+}
+
+.hidden-dashboard #livePreview {
+  margin-top: 0;
+}
+
+.hidden-dashboard #recordingSection {
+  width: 100%;
+  z-index: 15;
+}
+
+.hidden-dashboard #livePreview,
+.hidden-dashboard #typewriter {
+  max-height: 100vh;
+  height: 80vh;
+}
+
+.hidden-dashboard #typewriter {
+  height: calc(80vh - 4vh);
+}
+.fullscreen #livePreview,
+.fullscreen .iphone {
+  max-height: 100vh;
+  height: 95vh;
+}
+.fullscreen .display-section {
+  padding: 20px 16px 20px 16px;
+}
+.fullscreen #typewriter {
+  height: calc(95vh - 4vh);
+}
+.fullscreen::-webkit-scrollbar {
+  display: none;
+}
+
+.automaticHide .iphone {
+  transform: translateY(10rem);
+  scale: 0;
+}
+
+.automaticHide #livePreview {
+  height: 100vh;
+}
+
+.hidden-dashboard .automaticHide .display-section {
+  flex-direction: column;
+  transition: flex-direction 0.5s;
+  width: 100%;
+}
+
+.hidden-dashboard .automaticHide .display-section #livePreview {
+  height: 100vh;
+  width: 100vw;
+}
+
+.dark-mode {
+  background-color: var(--bg-dark);
+  color: var(--text-color-dark);
+}
+
+.dark-mode .form-check-container:hover {
+  background-color: #636060;
+}
+
+.dark-mode .form-check-input {
+  background-color: var(--bg-scrollbar) !important;
+}
+
+.dark-mode #dashboard,
+.dark-mode #dashnav,
+.dark-mode .setting-dashboard {
+  background-color: var(--bg-dark);
+}
+
+.dark-mode #recordingSection {
+  background-color: black;
+}
+
+.dark-mode #typewriter,
+.dark-mode #livePreview {
+  background-color: var(--bg-typelive);
+  color: var(--text-color-light);
+}
+
+.dark-mode textarea::placeholder,
+.dark-mode input::placeholder {
+  color: var(--placeholder-color);
+}
+
+.dark-mode input:focus {
+  border-color: #00ff00;
+  background-color: #2c2c2c;
+  color: #ffffff;
+}
+.dark-mode #htmlInput,
+.dark-mode #cssInput,
+.dark-mode #jsInput,
+.dark-mode textarea,
+.dark-mode input {
+  background-color: var(--inputbg-color);
+  color: var(--text-color-light);
+}
+.dark-mode #toggleDashboard {
+  background-color: var(--bg-dark);
+  color: var(--text-color-dark);
+}
+
+.dark-mode #toggleDashboard:hover,
+.dark-mode #toggleDashboard:active,
+.dark-mode #toggleDashboard:focus {
+  background-color: var(--bg-dark);
+  color: var(--text-color-dark);
+}
+
+.dark-mode .iphone,
+.dark-mode #livePreview {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 1px 6px rgba(0, 0, 0, 0.4),
+    0 8px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+.dark-mode .token.comment,
+.dark-mode .token.prolog,
+.dark-mode .token.doctype,
+.dark-mode .token.cdata {
+  color: #46b948 !important;
+  font-style: italic;
+}
+
+.dark-mode .token.punctuation {
+  color: #b8b8b8 !important;
+}
+
+.dark-mode .token.property,
+.dark-mode .token.tag,
+.dark-mode .token.boolean,
+.dark-mode .token.number,
+.dark-mode .token.constant,
+.dark-mode .token.symbol {
+  color: #7fc0e8 !important;
+}
+
+.dark-mode .token.string,
+.dark-mode .token.char,
+.dark-mode .token.builtin,
+.dark-mode .token.inserted {
+  color: #50fa7b !important;
+}
+
+.dark-mode .token.string {
+  color: #ff9367 !important;
+}
+
+.dark-mode .token.selector {
+  color: #f5d11c !important;
+}
+
+.dark-mode .token.entity,
+.dark-mode .token.url,
+.dark-mode .token.variable {
+  color: #f8f8f2 !important;
+}
+
+.dark-mode .token.operator {
+  color: rgb(101, 162, 255);
+}
+
+.dark-mode .token.atrule,
+.dark-mode .token.keyword {
+  color: rgb(114 171 255);
+}
+
+.dark-mode .token.attr-value {
+  color: #ff9367 !important;
+}
+
+.dark-mode .token.attr-name {
+  color: #b9fafa !important;
+}
+
+.token.variable,
+.token.function,
+.token.identifier {
+  color: #9cdcfe !important;
+}
