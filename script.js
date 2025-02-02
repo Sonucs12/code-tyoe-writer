@@ -186,7 +186,7 @@ function startTyping() {
     document.getElementById("codeSwitchDelay").value,
     10
   );
-  // Check if the delay is a valid number
+
   if (isNaN(codeSwitchDelay) || codeSwitchDelay < 0) {
     console.error("Invalid delay value");
     return;
@@ -223,42 +223,93 @@ function startTyping() {
     cssContent: "",
     jsContent: "",
   };
+  typewriterContext.styleElement.classList.add("dynamic-style");
   iframeDoc.head.appendChild(typewriterContext.styleElement);
   document.querySelectorAll(".stopBtn").forEach((button) => {
     button.disabled = false;
   });
+  resetTypewriterContext();
   typeNextChar();
 }
-document.getElementById("refreshButton").addEventListener("click", refreshIframe);
-
+document
+  .getElementById("refreshButton")
+  .addEventListener("click", refreshIframe);
 function refreshIframe() {
-  const iframe = document.getElementById("livePreview"); 
+  const iframe = document.getElementById("livePreview");
   const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
   const savedContent = iframeDoc.body.innerHTML;
   const savedStyles = iframeDoc.head.innerHTML;
-  iframe.contentWindow.location.reload();
-  iframe.onload = () => {
-    console.log("refresh ifrsme")
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-    iframeDoc.open();
-    iframeDoc.write(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        ${savedStyles}
-      </head>
-      <body>
-        ${savedContent}
-      </body>
-      </html>
-    `);
-    iframeDoc.close();
-  };
+  iframeDoc.body.innerHTML = savedContent;
+  iframeDoc.head.innerHTML = savedStyles;
+  iframeDoc.body.scrollTop = 0;
+  iframeDoc.documentElement.scrollTop = 0;
 }
+document.getElementById("cleanButton").addEventListener("click", cleanIframe);
+function cleanIframe() {
+  const iframe = document.getElementById("livePreview");
+  const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+  iframeDoc.body.innerHTML = "";
+  const dynamicStyles = iframeDoc.querySelectorAll("style.dynamic-style");
+  dynamicStyles.forEach((style) => style.remove());
+  const initialStyle = document.createElement("style");
+  initialStyle.textContent = `
+    body { padding: 20px 0px 20px 0px; }
+    body::-webkit-scrollbar { display: none; }
+  `;
+  iframeDoc.head.appendChild(initialStyle);
+  const typewriterElement = document.getElementById("typewriter");
+  if (typewriterElement) {
+    typewriterElement.textContent = "";
+  }
 
+  resetTypewriterContext();
+  startTyping();
+}
+function resetTypewriterContext() {
+  // Reset typewriter context to start from the beginning
+  const htmlCode = document.getElementById("htmlInput").value.split("\n");
+  const cssCode = document.getElementById("cssInput").value.split("\n");
+  const jsCode = document.getElementById("jsInput").value.split("\n");
+  const codeSwitchDelay = parseInt(
+    document.getElementById("codeSwitchDelay").value,
+    10
+  );
+  if (isNaN(codeSwitchDelay) || codeSwitchDelay < 0) {
+    console.error("Invalid delay value");
+    return;
+  }
+  const typewriterElement = document.getElementById("typewriter");
+  const livePreviewElement = document.getElementById("livePreview");
+  const iframeDoc =
+    livePreviewElement.contentDocument ||
+    livePreviewElement.contentWindow.document;
+  let allCode = [
+    { tag: "html", code: htmlCode },
+    { tag: "css", code: cssCode },
+    { tag: "js", code: jsCode },
+  ];
+  typewriterContext = {
+    allCode,
+    currentBlockIndex: 0,
+    currentLineIndex: 0,
+    currentCharIndex: 0,
+    typewriterElement,
+    livePreviewElement,
+    styleElement: iframeDoc.createElement("style"),
+    codeSwitchDelay,
+    htmlContent: "",
+    cssContent: "",
+    jsContent: "",
+  };
+  typewriterContext.styleElement.classList.add("dynamic-style");
+  iframeDoc.head.appendChild(typewriterContext.styleElement);
+}
 document.addEventListener("keydown", (event) => {
   const recordingSection = document.querySelector("#recordingSection");
-  if (event.code === "Space" && recordingSection.classList.contains("fullscreen")) {
+  if (
+    event.code === "Space" &&
+    recordingSection.classList.contains("fullscreen")
+  ) {
     event.preventDefault();
     toggleTyping();
   }

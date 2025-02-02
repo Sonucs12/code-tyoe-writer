@@ -178,19 +178,19 @@ hr {
 }
 
 #expand-dashboard,
-#copypause, #refreshButton {
+#copypause, #refreshButton, #cleanButton {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   font-size: 15px;
 }
 
-#refreshButton {
+#cleanButton {
   margin: 0 10px 0 auto;
 }
-#copypause{
+#copypause, #refreshButton{
   margin-right: 10px;
 }
-#expand-dashboard:hover, #copypause:hover, #refreshButton:hover {
+#expand-dashboard:hover, #copypause:hover, #refreshButton:hover, #cleanButton:hover {
   cursor: pointer;
   color: var(--text-color-button-hover);
 }
