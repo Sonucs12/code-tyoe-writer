@@ -6,6 +6,11 @@ let typeSpeed = 100;
 let width = 35;
 let font = 20;
 
+let cursorElement;
+function refreshPrism() {
+  Prism.highlightAll();
+  setTimeout(() => Prism.highlightAll(), 100); // Double refresh
+}
 const editor = document.getElementById("typewriter");
 
 showAlert("Welcome to CodePen Clone", "success");
@@ -65,14 +70,12 @@ function typeNextChar() {
     if (previousBlock.code.length > 0) {
       typewriterElement.innerHTML += `\n\n/* Starting ${currentBlock.tag.toUpperCase()} Code */`;
       Prism.highlightElement(typewriterElement);
-      typewriterElement.scrollTo(0, typewriterElement.scrollHeight);
     }
   }
   const currentLine = currentBlock.code[currentLineIndex] || "";
   if (currentCharIndex < currentLine.length) {
     const char = currentLine[currentCharIndex];
 
-    // Check for the custom delay marker
     if (currentLine.includes("(PAUSE_HERE)")) {
       console.log("Pause triggered");
       typewriterContext.currentLineIndex++;
@@ -87,9 +90,7 @@ function typeNextChar() {
       typewriterElement.textContent += char;
       Prism.highlightElement(typewriterElement);
     }
-    const iframeDoc =
-      livePreviewElement.contentDocument ||
-      livePreviewElement.contentWindow.document;
+
     if (
       currentBlock.tag === "html" ||
       currentBlock.tag === "css" ||
@@ -97,13 +98,15 @@ function typeNextChar() {
     ) {
       const removeWordWrapClass =
         typewriterElement.classList.contains("removeWordWrap");
-      typewriterElement.className = `language-${currentBlock.tag} line-numbers`;
+      typewriterElement.className = `language-${currentBlock.tag}`;
       if (removeWordWrapClass) {
         typewriterElement.classList.add("removeWordWrap");
       }
       Prism.highlightElement(typewriterElement);
     }
-
+    const iframeDoc =
+      livePreviewElement.contentDocument ||
+      livePreviewElement.contentWindow.document;
     if (currentBlock.tag === "html") {
       document.querySelector(".currentCode").textContent = "HTML";
       iframeDoc.body.innerHTML = typewriterElement.textContent;
@@ -173,7 +176,7 @@ function startTyping() {
   const typewrite = document.querySelector("#typewriter");
   const typewriter = document.getElementById("typewriter");
   typewriter.classList.add("typing");
-  typewriter.textContent = "";
+  // typewriter.textContent = "";
   document.querySelector("#editeditor").style.color = "white";
   typewrite.contentEditable = false;
   const htmlCode = document.getElementById("htmlInput").value.split("\n");
@@ -199,7 +202,7 @@ function startTyping() {
     livePreviewElement.contentWindow.document;
   iframeDoc.open();
   iframeDoc.write(
-    ` <!DOCTYPE html> <html> <head> <meta name="viewport" content="width=device-width, initial-scale=1"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer"/> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"><style>body{padding:20px 0px 20px 0px;} body::-webkit-scrollbar{display: none;}<style> </head> <body></body> </html> `
+    ` <!DOCTYPE html> <html> <head> <meta name="viewport" content="width=device-width, initial-scale=1"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer"/> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"><style>body{padding:20px 20px 20px 20px;} body::-webkit-scrollbar{display: none;}<style> </head> <body></body> </html> `
   );
   iframeDoc.close();
   let allCode = [
@@ -226,8 +229,33 @@ function startTyping() {
   });
   typeNextChar();
 }
+document.getElementById("refreshButton").addEventListener("click", refreshIframe);
 
-// Listen for space bar keypress only when toggle mode is active
+function refreshIframe() {
+  const iframe = document.getElementById("livePreview"); 
+  const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+  const savedContent = iframeDoc.body.innerHTML;
+  const savedStyles = iframeDoc.head.innerHTML;
+  iframe.contentWindow.location.reload();
+  iframe.onload = () => {
+    console.log("refresh ifrsme")
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+    iframeDoc.open();
+    iframeDoc.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        ${savedStyles}
+      </head>
+      <body>
+        ${savedContent}
+      </body>
+      </html>
+    `);
+    iframeDoc.close();
+  };
+}
+
 document.addEventListener("keydown", (event) => {
   const body = document.body;
   if (event.code === "Space" && body.classList.contains("hidden-dashboard")) {
@@ -285,18 +313,20 @@ function updateBackground() {
 
 function updateTypingSpeed() {
   typeSpeed = parseInt(document.getElementById("realTimeSpeed").value, 10);
-  document.getElementById("typingSpeed").value = typeSpeed;
+  document.getElementById("typingSpeedValue").textContent = typeSpeed + "ms";
 }
 
 function updateWidth() {
   const width = `${parseInt(document.getElementById("widthControl").value)}%`;
   document.getElementById("livePreview").style.width = width;
   document.querySelector(".iphone").style.width = width;
+  document.getElementById("widthValue").textContent = width;
 }
 
 function updateFont() {
   let font = document.getElementById("fontControl").value;
   document.getElementById("typewriter").style.fontSize = font + "px";
+  document.getElementById("fontValue").textContent = font + "px";
 }
 
 function toggleClass(targetSelector, className, condition = null) {
@@ -422,7 +452,7 @@ function showAlert(message, type) {
   setTimeout(() => {
     alertContainer.style.transform = "translateX(-50%) scale(0)";
     setTimeout(() => alertContainer.remove(), 300);
-  }, 2000);
+  }, 4000);
 }
 
 function copyCode() {

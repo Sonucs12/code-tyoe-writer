@@ -39,10 +39,12 @@ body.noselect {
 .ex-dashboard #recordingSection {
   width: 50%;
 }
+
 #typewriter.removeWordWrap {
   overflow-wrap: normal;
   overflow-x: auto;
 }
+
 #livePreview.adding-border {
   border: none;
   background-color: transparent;
@@ -59,18 +61,22 @@ body.noselect {
 
   transform: translateY(0px);
 }
+
 .fullscreen .recording-nav {
   position: relative;
   visibility: hidden;
   animation: slide-down 0.5s ease forwards;
 }
+
 @keyframes slide-down {
   0% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-100px);
   }
+
   100% {
     display: none;
   }
@@ -105,17 +111,21 @@ body.noselect {
 .hidden-dashboard #typewriter {
   height: calc(80vh - 4vh);
 }
+
 .fullscreen #livePreview,
 .fullscreen .iphone {
   max-height: 100vh;
   height: 95vh;
 }
+
 .fullscreen .display-section {
   padding: 20px 16px 20px 16px;
 }
+
 .fullscreen #typewriter {
   height: calc(95vh - 4vh);
 }
+
 .fullscreen::-webkit-scrollbar {
   display: none;
 }
@@ -174,11 +184,13 @@ body.noselect {
   color: var(--placeholder-color);
 }
 
-.dark-mode input:focus {
+.dark-mode input:focus,
+.dark-mode .wrapper:focus {
   border-color: #00ff00;
   background-color: #2c2c2c;
   color: #ffffff;
 }
+
 .dark-mode #htmlInput,
 .dark-mode #cssInput,
 .dark-mode #jsInput,
@@ -187,6 +199,7 @@ body.noselect {
   background-color: var(--inputbg-color);
   color: var(--text-color-light);
 }
+
 .dark-mode #toggleDashboard {
   background-color: var(--bg-dark);
   color: var(--text-color-dark);
@@ -268,4 +281,41 @@ body.noselect {
 .token.function,
 .token.identifier {
   color: #9cdcfe !important;
+}
+
+.iphone,
+#livePreview,
+#typewriter {
+  transform: translateZ(0);
+  will-change: transform;
+  contain: content;
+}
+
+.display-section {
+  contain: layout style paint;
+}
+
+.setting-dashboard {
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.setting-dashboard.show {
+  transform: translateX(0);
+}
+
+.automaticHide .iphone {
+  transform: translate3d(0, 10rem, 0) scale(0);
+}
+
+@media (max-width: 768px) {
+  #dashboard {
+    position: fixed;
+    z-index: 1000;
+  }
+
+  #recordingSection {
+    width: 100%;
+  }
 }

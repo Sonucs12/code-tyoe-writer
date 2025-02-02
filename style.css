@@ -16,7 +16,6 @@
   --bg-typelive: #f1f1f1;
 }
 
-
 body {
   overflow-x: hidden;
   overflow-y: hidden;
@@ -69,12 +68,14 @@ hr {
 ::-webkit-scrollbar-track {
   background: transparent;
   border-radius: 10px;
+  cursor: pointer;
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--bg-scrollbar);
   border-radius: 10px;
   cursor: pointer;
+  margin-top: 40px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -133,16 +134,21 @@ hr {
   display: flex;
   flex-direction: row;
 }
+.wrapper {
+  overflow: hidden;
+  border-radius: 18px;
+}
 
 #htmlInput,
 #cssInput,
 #jsInput {
-  min-height: 100px;
+  height: 250px;
   max-height: 500px;
-  resize: vertical;
+  resize: none;
   overflow: auto;
+  border-radius: 18px;
+  padding-top: 20px;
 }
-
 .settingBtn {
   margin: 0 auto 0 10px;
 }
@@ -172,20 +178,23 @@ hr {
 }
 
 #expand-dashboard,
-#copypause {
+#copypause, #refreshButton {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   font-size: 15px;
 }
 
-#copypause {
+#refreshButton {
   margin: 0 10px 0 auto;
 }
-
-#expand-dashboard:hover {
+#copypause{
+  margin-right: 10px;
+}
+#expand-dashboard:hover, #copypause:hover, #refreshButton:hover {
   cursor: pointer;
   color: var(--text-color-button-hover);
 }
+
 
 .start-stopbtn {
   display: flex;
@@ -351,10 +360,6 @@ hr {
   color: #b0b0b0;
   transition: all 0.2s ease-in-out;
 }
-#copypause:hover {
-  color: var(--text-color-button-hover);
-  transition: all 0.2s ease-in-out;
-}
 
 #editeditor:focus {
   color: #ff004c;
@@ -380,4 +385,30 @@ hr {
   height: auto;
   margin-left: auto;
   margin-right: auto;
+}
+#fontValue {
+  margin-left: auto;
+}
+
+
+.tooltipp {
+  position: relative;
+  cursor: pointer;
+
+}
+
+.tooltipp:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: -35px;  transition:all 0.3s ;
+  right: 0px;
+  
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  z-index: 14;
 }
