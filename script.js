@@ -176,7 +176,7 @@ function startTyping() {
   const typewrite = document.querySelector("#typewriter");
   const typewriter = document.getElementById("typewriter");
   typewriter.classList.add("typing");
-  // typewriter.textContent = "";
+  typewriter.textContent = "";
   document.querySelector("#editeditor").style.color = "white";
   typewrite.contentEditable = false;
   const htmlCode = document.getElementById("htmlInput").value.split("\n");
@@ -257,8 +257,8 @@ function refreshIframe() {
 }
 
 document.addEventListener("keydown", (event) => {
-  const body = document.body;
-  if (event.code === "Space" && body.classList.contains("hidden-dashboard")) {
+  const recordingSection = document.querySelector("#recordingSection");
+  if (event.code === "Space" && recordingSection.classList.contains("fullscreen")) {
     event.preventDefault();
     toggleTyping();
   }
