@@ -246,6 +246,12 @@ function refreshIframe() {
 }
 document.getElementById("cleanButton").addEventListener("click", cleanIframe);
 function cleanIframe() {
+  // Stop the typing process
+  paused = true;
+  isTyping = false;
+  clearTimeout(typingInterval);
+  toggleTyping();
+ 
   const iframe = document.getElementById("livePreview");
   const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
   iframeDoc.body.innerHTML = "";
@@ -263,7 +269,7 @@ function cleanIframe() {
   }
 
   resetTypewriterContext();
-  startTyping();
+
 }
 function resetTypewriterContext() {
   // Reset typewriter context to start from the beginning
