@@ -48,9 +48,6 @@ hr {
   transition: all 0.3s ease-in-out;
 }
 
-.logo-container:hover {
-  background-color: var(--bg-secondary);
-}
 
 * {
   box-sizing: border-box;
@@ -176,21 +173,22 @@ hr {
 .main-dashboard {
   transition: filter 0.3s ease;
 }
-
+.tools{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-left: auto;
+  margin-right: 15px;
+}
 #expand-dashboard,
-#copypause, #refreshButton, #cleanButton {
+#copypause, #refreshButton, #cleanButton, #clearCodeButton {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   font-size: 15px;
 }
 
-#cleanButton {
-  margin: 0 10px 0 auto;
-}
-#copypause, #refreshButton{
-  margin-right: 10px;
-}
-#expand-dashboard:hover, #copypause:hover, #refreshButton:hover, #cleanButton:hover {
+#expand-dashboard:hover, #copypause:hover, #refreshButton:hover, #cleanButton:hover, #clearCodeButton:hover {
   cursor: pointer;
   color: var(--text-color-button-hover);
 }
@@ -261,7 +259,7 @@ hr {
   border-radius: 10px 10px 8px 8px;
   padding-bottom: 50px;
   scroll-behavior: smooth;
-  transition: height 0.5s ease-in-out, width 0.3s ease,
+  transition: height 0.5s ease-in-out, width 0.3s,
     max-height 0.5s ease-in-out;
 }
 
@@ -284,7 +282,7 @@ hr {
   max-height: 90vh;
   font-family: Arial, sans-serif;
   scroll-behavior: smooth;
-  transition: height 0.5s ease-in-out, width 0.3s ease;
+  transition: height 0.5s ease-in-out, width 0.3s;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), 0 1px 6px rgba(0, 0, 0, 0.1),
     0 8px 24px rgba(0, 0, 0, 0.1), 0 0 15px rgba(255, 175, 51, 0.2);
   transform: translateZ(0);
@@ -304,7 +302,7 @@ hr {
 
 .iphone {
   width: 35%;
-  transition: transform 0.5s, scale 0.5s, width 0.3s ease,
+  transition: transform 0.5s, scale 0.5s, width 0.3s,
     height 0.5s ease-in-out, max-height 0.5s ease-in-out;
   transform: translateY(0);
   border: 1px solid #6c757d;
@@ -419,4 +417,37 @@ hr {
   white-space: nowrap;
   transition: all 0.3s ease;
   z-index: 14;
+}
+
+.popup-container {
+  display: block;
+  position: absolute;
+  z-index: 9999;
+  background-color: rgba(16, 15, 15, 0.909);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  width: 30%;
+  border: 10px solid transparent;
+  box-sizing: border-box;
+ max-width: 50%;
+  cursor: move;
+  height: 25vh;
+  overflow: auto;
+  padding-left: 10px;
+}
+.popup-container::-webkit-scrollbar{
+  display: none;
+}
+
+pre {
+ white-space: pre-wrap;
+  padding: 5px 0px 0px 0px;
+  border-radius: 5px;
+  overflow-x: auto; font-size: 17px;
+  font-weight: 600;
+  overflow-y: hidden;
+  margin: 0;
 }

@@ -5,11 +5,10 @@ let typewriterContext = null;
 let typeSpeed = 100;
 let width = 35;
 let font = 20;
-
 let cursorElement;
 function refreshPrism() {
   Prism.highlightAll();
-  setTimeout(() => Prism.highlightAll(), 100); // Double refresh
+  setTimeout(() => Prism.highlightAll(), 100); 
 }
 const editor = document.getElementById("typewriter");
 
@@ -75,6 +74,7 @@ function typeNextChar() {
   const currentLine = currentBlock.code[currentLineIndex] || "";
   if (currentCharIndex < currentLine.length) {
     const char = currentLine[currentCharIndex];
+    processPopup(currentBlock, currentCharIndex, currentLine);
 
     if (currentLine.includes("(PAUSE_HERE)")) {
       console.log("Pause triggered");
@@ -155,6 +155,7 @@ function typeNextChar() {
     }
     typewriterElement.scrollTo(0, typewriterElement.scrollHeight);
     livePreviewElement.scrollTop = livePreviewElement.scrollHeight;
+
     typewriterContext.currentCharIndex++;
     typingInterval = setTimeout(typeNextChar, typeSpeed);
   } else {
@@ -169,6 +170,7 @@ function typeNextChar() {
   }
   toggleAutomaticHideOnTypingEnd();
 }
+
 function startTyping() {
   if (isTyping) return;
   isTyping = true;
@@ -202,7 +204,7 @@ function startTyping() {
     livePreviewElement.contentWindow.document;
   iframeDoc.open();
   iframeDoc.write(
-    ` <!DOCTYPE html> <html> <head> <meta name="viewport" content="width=device-width, initial-scale=1"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer"/> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"><style>body{padding:20px 20px 20px 20px;} body::-webkit-scrollbar{display: none;}<style> </head> <body></body> </html> `
+    ` <!DOCTYPE html> <html> <head> <meta name="viewport" content="width=device-width, initial-scale=1"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer"/> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"><style>body{padding:20px 20px 20px 20px;} body::-webkit-scrollbar{display: none;}</style> </head> <body></body> </html> `
   );
   iframeDoc.close();
   let allCode = [
@@ -231,6 +233,158 @@ function startTyping() {
   resetTypewriterContext();
   typeNextChar();
 }
+
+function escapeHTML(html) {
+  return html.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function findCSSElement(cssLine) {
+  const iframeDoc = document.getElementById("livePreview").contentDocument;
+  if (!iframeDoc) {
+    console.warn("Iframe document not found");
+    return null;
+  }
+
+  const selectorMatch = cssLine.match(
+    /^\s*([.#]?[a-zA-Z_][a-zA-Z0-9_-]*)\s*\{/
+  );
+  if (!selectorMatch || !selectorMatch[1]) {
+    return null;
+  }
+
+  let selector = selectorMatch[1];
+
+  if (selector.includes("..") || selector.endsWith(".")) {
+    return null;
+  }
+
+  console.log("CSS selector found:", selector);
+
+  try {
+    const element = iframeDoc.querySelector(selector);
+    if (element) {
+      return element;
+    }
+  } catch (e) {
+    console.error(`Invalid CSS selector: ${selector}`);
+  }
+  return null;
+}
+
+function findJSElement(jsLine) {
+  const iframeDoc = document.getElementById("livePreview").contentDocument;
+  if (!iframeDoc) {
+    return null;
+  }
+
+  // Match valid querySelector, getElementById, getElementsByClassName
+  const selectorMatch = jsLine.match(
+    /querySelector\(['"`](.*?)['"`]\)|getElementById\(['"`](.*?)['"`]\)|getElementsByClassName\(['"`](.*?)['"`]\)/
+  );
+  if (!selectorMatch) {
+    return null;
+  }
+
+  const query = selectorMatch[1] || selectorMatch[2] || selectorMatch[3]; // Extract selector
+  if (!query || query.trim() === "") {
+    return null;
+  }
+
+  console.log("JS selector found:", query);
+  try {
+    const element = iframeDoc.querySelector(query);
+    if (element) {
+      return element;
+    }
+  } catch (e) {
+    console.error(`Invalid JS selector: ${query}`);
+  }
+  return null;
+}
+
+function processPopup(currentBlock, currentCharIndex, currentLine) {
+  const autoHideCheckbox = document.querySelector(".showElements");
+  if (!autoHideCheckbox || !autoHideCheckbox.checked) return;
+
+  if (
+    currentBlock.tag === "css" &&
+    currentCharIndex === currentLine.length - 1
+  ) {
+    const htmlElement = findCSSElement(currentLine);
+    if (htmlElement) showPopup(htmlElement, "CSS");
+  } else if (
+    currentBlock.tag === "js" &&
+    currentCharIndex === currentLine.length - 1
+  ) {
+    const htmlElement = findJSElement(currentLine);
+    if (htmlElement) showPopup(htmlElement, "JavaScript");
+  }
+}
+
+function makePopupDraggable() {
+  const popupContainer = document.getElementById("popupContainer");
+  let isDragging = false;
+  let offsetX, offsetY;
+  popupContainer.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    offsetX = e.clientX - popupContainer.offsetLeft;
+    offsetY = e.clientY - popupContainer.offsetTop;
+    document.body.style.userSelect = "none";
+  });
+  document.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+      popupContainer.style.left = `${e.clientX - offsetX}px`;
+      popupContainer.style.top = `${e.clientY - offsetY}px`;
+    }
+  });
+  document.addEventListener("mouseup", () => {
+    isDragging = false;
+    document.body.style.userSelect = "";
+  });
+}
+
+makePopupDraggable();
+function showPopup(htmlElement, context) {
+  const popupContainer = document.getElementById("popupContainer");
+  if (!popupContainer) {
+    console.warn("Popup container not found!");
+    return;
+  }
+
+  if (htmlElement) {
+    const iframeDoc = document.getElementById("livePreview").contentDocument;
+    const originalHTML = iframeDoc.body.innerHTML;
+
+    let elementHTML = htmlElement.outerHTML;
+
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = originalHTML;
+    const classSelector = htmlElement.className
+      ? "." + htmlElement.className.replace(/\s+/g, ".")
+      : "";
+    const matchingElement = tempDiv.querySelector(
+      htmlElement.tagName.toLowerCase() + classSelector
+    );
+
+    if (matchingElement) {
+      elementHTML = matchingElement.outerHTML;
+    }
+    popupContainer.innerHTML = `<strong>${context} applied to:</strong><br><pre><code class="language-markup">${escapeHTML(elementHTML)}</code></pre>
+    `;
+    
+    // Apply Prism.js highlighting
+    Prism.highlightAll();
+    popupContainer.style.display = "block";
+
+    setTimeout(() => {
+      console.log("Hiding popup");
+      popupContainer.style.display = "none";
+    }, 800000);
+  } else {
+    console.warn("No HTML element passed to showPopup.");
+  }
+}
+
 document
   .getElementById("refreshButton")
   .addEventListener("click", refreshIframe);
@@ -251,25 +405,19 @@ function cleanIframe() {
   isTyping = false;
   clearTimeout(typingInterval);
   toggleTyping();
- 
+
   const iframe = document.getElementById("livePreview");
   const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
   iframeDoc.body.innerHTML = "";
   const dynamicStyles = iframeDoc.querySelectorAll("style.dynamic-style");
   dynamicStyles.forEach((style) => style.remove());
-  const initialStyle = document.createElement("style");
-  initialStyle.textContent = `
-    body { padding: 20px 0px 20px 0px; }
-    body::-webkit-scrollbar { display: none; }
-  `;
-  iframeDoc.head.appendChild(initialStyle);
+
   const typewriterElement = document.getElementById("typewriter");
   if (typewriterElement) {
     typewriterElement.textContent = "";
   }
 
   resetTypewriterContext();
-
 }
 function resetTypewriterContext() {
   // Reset typewriter context to start from the beginning
@@ -289,6 +437,12 @@ function resetTypewriterContext() {
   const iframeDoc =
     livePreviewElement.contentDocument ||
     livePreviewElement.contentWindow.document;
+
+  
+  const existingDynamicStyle = iframeDoc.querySelector("style.dynamic-style");
+  if (existingDynamicStyle) {
+    existingDynamicStyle.remove();
+  }
   let allCode = [
     { tag: "html", code: htmlCode },
     { tag: "css", code: cssCode },
@@ -320,6 +474,13 @@ document.addEventListener("keydown", (event) => {
     toggleTyping();
   }
 });
+document.getElementById("clearCodeButton").addEventListener("click", clearCode);
+function clearCode() {
+  document.getElementById("htmlInput").value = "";
+  document.getElementById("cssInput").value = "";
+  document.getElementById("jsInput").value = "";
+  cleanIframe();
+}
 document.querySelectorAll(".toggleDashboard").forEach((toggle) => {
   toggle.addEventListener("click", () =>
     toggleClass("body", "hidden-dashboard")
@@ -532,5 +693,12 @@ document.addEventListener("dblclick", function () {
   if (dashboardHidden) {
     document.body.classList.toggle("noselect");
     recordingSection.classList.toggle("fullscreen");
+  }
+});
+document.querySelector(".showElements").addEventListener("change", function () {
+  if (this.checked) {
+    showAlert("Elements previewing enabled", "success");
+  } else{
+    showAlert("Elements previewing disabled", "info");
   }
 });

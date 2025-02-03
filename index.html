@@ -73,21 +73,31 @@
             <label for="hideTypeWriter" class="form-check-label">Auto Hide TypeWriter</label>
           </div>
         </div>
+        <div class="form-check-container">
+          <div class="form-check form-switch cursor-pointer">
+            <input type="checkbox" class="showElements form-check-input" />
+            <label for="showElements" class="form-check-label">Show Elements</label>
+          </div>
+        </div>
       </div>
 
       <div class="main-dashboard p-3 pt-0">
-        <div class="tools mt-2 mb-4 d-flex align-items-center justify-content-start">
+        <div class="mt-2 mb-4 d-flex align-items-center justify-content-between">
           <h4 class="">Dashboard</h4>
-          <span id="cleanButton" class="tooltipp" data-tooltip="clear iframe">
-           
-  <i class="fas fa-trash-alt"></i>
-          </span>
-          <span id="refreshButton" class="tooltipp" data-tooltip="Refresh livepreview">
-            <i class="fas fa-sync-alt"></i>
-          </span>
-          <span id="copypause" onclick="copyPause()" class="tooltipp" data-tooltip="Pause text">
-            <i class="bi bi-clipboard"></i>
-          </span>
+          <div class="tools">
+            <span id="clearCodeButton" class="tooltipp" data-tooltip="clear inputs">
+              <i class="fas fa-eraser"></i>
+            </span>
+            <span id="cleanButton" class="tooltipp" data-tooltip="clear iframe">
+              <i class="fas fa-trash-alt"></i>
+            </span>
+            <span id="refreshButton" class="tooltipp" data-tooltip="Refresh livepreview">
+              <i class="fas fa-sync-alt"></i>
+            </span>
+            <span id="copypause" onclick="copyPause()" class="tooltipp" data-tooltip="Pause text">
+              <i class="bi bi-clipboard"></i>
+            </span>
+          </div>
           <span id="expand-dashboard" class="tooltipp" data-tooltip="Expand">
             <i class="bi bi-arrow-right-circle-fill"></i>
           </span>
@@ -163,7 +173,6 @@
           <i class="fas fa-globe"></i>
         </a>
       </div>
-
     </div>
 
     <!-- Recording Section -->
@@ -200,7 +209,9 @@
             <i id="editeditor" class="bi bi-pencil-square float-end"></i>
           </div>
           <div id="typewriter" contenteditable="false" class="typewriter"></div>
+         
         </div>
+ <div id="popupContainer" class="popup-container"></div>
       </div>
     </div>
   </section>
