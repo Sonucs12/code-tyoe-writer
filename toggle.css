@@ -164,7 +164,7 @@ flex-grow: 1;
   color: var(--text-color-dark);
 }
 
-.dark-mode .form-check-container:hover {
+.dark-mode .form-check-container:hover, .dark-mode .savedCode:hover {
   background-color: #636060;
 }
 
@@ -204,7 +204,8 @@ flex-grow: 1;
 .dark-mode #cssInput,
 .dark-mode #jsInput,
 .dark-mode textarea,
-.dark-mode input {
+.dark-mode input,
+.dark-mode .savecodeContainer{
   background-color: var(--inputbg-color);
   color: var(--text-color-light);
 }

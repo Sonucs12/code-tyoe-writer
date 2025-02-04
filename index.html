@@ -102,18 +102,33 @@
             <i class="bi bi-arrow-right-circle-fill"></i>
           </span>
         </div>
+        <div class="savecodeContainer mb-3">
+          <div class="titleHeader d-flex align-items-start justify-content-between">
+            <span id="titlename">title</span>
+            <div class="title cont d-flex gap-3"><span id="editTitle" onclick="editTitle()"><i
+                  class="fa fa-pencil"></i></span>
+
+              <div id="saveCodeButton" style="display: none">
+                <i class="fa-solid fa-floppy-disk"></i>
+              </div>
+              <span id="collasp" onclick="toggleSavedCode()"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+          </div>
+          <hr class="mt-2" />
+          <div class="showsaveCode"></div>
+        </div>
 
         <div class="form-group mb-3">
           <label for="htmlInput">HTML Code </label>
-          <textarea id="htmlInput" class="form-control" rows="6" placeholder="Enter HTML code here..."></textarea>
+          <textarea id="htmlInput" class="form-control language-html" rows="6" placeholder="Enter HTML code here..."></textarea>
         </div>
         <div class="form-group mb-3">
           <label for="cssInput">CSS Code</label>
-          <textarea id="cssInput" class="form-control" rows="6" placeholder="Enter CSS code here..."></textarea>
+          <textarea id="cssInput" class="form-control language-css" rows="6" placeholder="Enter CSS code here..."></textarea>
         </div>
         <div class="form-group jscontainer mb-3">
           <label for="jsInput">JavaScript Code</label>
-          <textarea id="jsInput" class="form-control" rows="6" placeholder="Enter JavaScript code here..."></textarea>
+          <textarea id="jsInput" class="form-control language-javascript" rows="6" placeholder="Enter JavaScript code here..."></textarea>
         </div>
 
         <div class="form-check-container">
@@ -122,8 +137,6 @@
             <label for="hidetypingbox" class="form-check-label cursor-pointer">Hide TypeWriter</label>
           </div>
         </div>
-
-        <div class="form-check-container"></div>
 
         <div class="form-group mb-3">
           <label for="fontControl" class="d-flex justify-content-between align-items-center">Adjust Font <span
@@ -209,9 +222,8 @@
             <i id="editeditor" class="bi bi-pencil-square float-end"></i>
           </div>
           <div id="typewriter" contenteditable="false" class="typewriter"></div>
-         
         </div>
- <div id="popupContainer" class="popup-container"></div>
+        <div id="popupContainer" class="popup-container"></div>
       </div>
     </div>
   </section>

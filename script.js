@@ -6,10 +6,9 @@ let typeSpeed = 100;
 let width = 35;
 let font = 20;
 let cursorElement;
-function refreshPrism() {
-  Prism.highlightAll();
-  setTimeout(() => Prism.highlightAll(), 100);
-}
+Prism.highlightAll();
+
+ 
 const editor = document.getElementById("typewriter");
 
 showAlert("Welcome to CodePen Clone", "success");
@@ -67,7 +66,7 @@ function typeNextChar() {
   ) {
     const previousBlock = allCode[currentBlockIndex - 1];
     if (previousBlock.code.length > 0) {
-      typewriterElement.innerHTML += `\n\n/* Starting ${currentBlock.tag.toUpperCase()} Code */`;
+      typewriterElement.innerHTML += `\n\n\n/* Starting ${currentBlock.tag.toUpperCase()} Code */`;
       Prism.highlightElement(typewriterElement);
     }
   }
@@ -193,9 +192,6 @@ function startTyping() {
     console.error("Invalid delay value");
     return;
   }
-  Prism.highlightAll(htmlCode);
-  Prism.highlightAll(cssCode);
-  Prism.highlightAll(jsCode);
   const typewriterElement = document.getElementById("typewriter");
   const livePreviewElement = document.getElementById("livePreview");
   typewriterElement.textContent = "";
@@ -464,16 +460,7 @@ function resetTypewriterContext() {
   typewriterContext.styleElement.classList.add("dynamic-style");
   iframeDoc.head.appendChild(typewriterContext.styleElement);
 }
-document.addEventListener("keydown", (event) => {
-  const recordingSection = document.querySelector("#recordingSection");
-  if (
-    event.code === "Space" &&
-    recordingSection.classList.contains("fullscreen")
-  ) {
-    event.preventDefault();
-    toggleTyping();
-  }
-});
+
 document.getElementById("clearCodeButton").addEventListener("click", clearCode);
 function clearCode() {
   document.getElementById("htmlInput").value = "";
@@ -493,7 +480,16 @@ document.querySelector("#expand-dashboard").addEventListener("click", () => {
     ? "bi bi-arrow-left-circle-fill float-end"
     : "bi bi-arrow-right-circle-fill float-end";
 });
-
+document.addEventListener("keydown", (event) => {
+  const recordingSection = document.querySelector("#recordingSection");
+  if (
+    event.code === "Space" &&
+    recordingSection.classList.contains("fullscreen")
+  ) {
+    event.preventDefault();
+    toggleTyping();
+  }
+});
 function toggleTyping() {
   const toggleButton = document.getElementById("stopBtn");
   const toggleBtn = document.getElementById("rstopbtn");
@@ -702,3 +698,99 @@ document.querySelector(".showElements").addEventListener("change", function () {
     showAlert("Elements previewing disabled", "info");
   }
 });
+
+
+document.getElementById("saveCodeButton").addEventListener("click", saveCode);
+
+function saveCode() {
+  const title = document.getElementById("titlename").textContent;
+  const htmlContent = document.getElementById("htmlInput").value.trim();
+  const cssContent = document.getElementById("cssInput").value.trim();
+  const jsContent = document.getElementById("jsInput").value.trim();
+
+  if (htmlContent || cssContent || jsContent) {
+    const savedCode = { title, htmlContent, cssContent, jsContent };
+    let savedCodes = JSON.parse(localStorage.getItem("savedCodes")) || [];
+    savedCodes.push(savedCode);
+    localStorage.setItem("savedCodes", JSON.stringify(savedCodes));
+    displaySavedCodes();
+    showAlert("saved success" , "info")
+  }
+}
+
+function displaySavedCodes() {
+  const savedCodes = JSON.parse(localStorage.getItem("savedCodes")) || [];
+  const container = document.querySelector(".showsaveCode");
+  container.innerHTML = "";
+
+  if (savedCodes.length === 0) {  
+    container.textContent = "No saved code";
+  } else {
+    savedCodes.forEach((code, index) => {
+      const codeDiv = document.createElement("div");
+      codeDiv.className = "savedCode";
+      codeDiv.innerHTML = `
+        <div class="codeTitle">${code.title}</div>
+        <span class="deleteCode" onclick="deleteCode(${index}, event)"><i class="fa fa-trash"></i></span>
+      `;
+      codeDiv.addEventListener("click", (event) => loadCode(index, event));
+      container.appendChild(codeDiv);
+    });
+  }
+}
+
+
+function loadCode(index, event) {
+  if (event.target.closest('.deleteCode')) return; // Prevent loading code if delete icon is clicked
+  const savedCodes = JSON.parse(localStorage.getItem("savedCodes")) || [];
+  const code = savedCodes[index];
+  document.getElementById("htmlInput").value = code.htmlContent;
+  document.getElementById("cssInput").value = code.cssContent;
+  document.getElementById("jsInput").value = code.jsContent;
+  refreshPrism();
+}
+
+function deleteCode(index, event) {
+  event.stopPropagation(); // Prevent loading code when deleting
+  let savedCodes = JSON.parse(localStorage.getItem("savedCodes")) || [];
+  savedCodes.splice(index, 1);
+  localStorage.setItem("savedCodes", JSON.stringify(savedCodes));
+  displaySavedCodes();
+  showAlert("deleted success" , "danger")
+}
+
+document.addEventListener("DOMContentLoaded", displaySavedCodes);
+
+const inputs = ["htmlInput", "cssInput", "jsInput"];
+inputs.forEach((input) => {
+  document.getElementById(input).addEventListener("input", showSaveButton);
+});
+
+function showSaveButton() {
+  const saveButton = document.getElementById("saveCodeButton");
+  saveButton.style.display = "block";
+}
+
+
+function toggleSavedCode() {
+  const savecodeContainer = document.querySelector(".savecodeContainer");
+  const collasp = document.getElementById("collasp");
+  savecodeContainer.classList.toggle("expanded");
+
+  if (savecodeContainer.classList.contains("expanded")) {
+    collasp.innerHTML = '<i class="fa-solid fa-chevron-up"></i>';
+  } else {
+    collasp.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
+  }
+}
+
+function editTitle() {
+  const title = document.getElementById("titlename");
+  title.contentEditable = true;
+  title.focus();
+  title.addEventListener("blur", () => {
+    title.contentEditable = false;
+  });
+}
+
+
