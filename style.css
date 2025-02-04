@@ -420,33 +420,50 @@ hr {
 }
 
 .popup-container {
-  display: block;
+  display:none;
   position: absolute;
+  right: 30px;
+  top:40px;
   z-index: 9999;
   background-color: rgba(16, 15, 15, 0.909);
   color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  
   border-radius: 15px;
-  width: 30%;
+  width: 35%;
   border: 10px solid transparent;
+  
   box-sizing: border-box;
  max-width: 50%;
   cursor: move;
-  height: 25vh;
+  height: 20vh;
+  max-height: 20vh;
   overflow: auto;
   padding-left: 10px;
+  opacity: 0;
+  transition: opacity 1s ease;
+  animation: fadein 1s ease forwards;
 }
+@keyframes fadein {
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+}
+.popup-container hr{
+  margin-top: 10px;
+}
+
 .popup-container::-webkit-scrollbar{
   display: none;
 }
 
 pre {
  white-space: pre-wrap;
-  padding: 5px 0px 0px 0px;
+  padding: 10px 0px 10px 0px;
   border-radius: 5px;
-  overflow-x: auto; font-size: 17px;
+  overflow-x: auto; font-size: 18px;
   font-weight: 600;
   overflow-y: hidden;
   margin: 0;

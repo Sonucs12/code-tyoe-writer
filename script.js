@@ -8,7 +8,7 @@ let font = 20;
 let cursorElement;
 function refreshPrism() {
   Prism.highlightAll();
-  setTimeout(() => Prism.highlightAll(), 100); 
+  setTimeout(() => Prism.highlightAll(), 100);
 }
 const editor = document.getElementById("typewriter");
 
@@ -369,17 +369,18 @@ function showPopup(htmlElement, context) {
     if (matchingElement) {
       elementHTML = matchingElement.outerHTML;
     }
-    popupContainer.innerHTML = `<strong>${context} applied to:</strong><br><pre><code class="language-markup">${escapeHTML(elementHTML)}</code></pre>
+    popupContainer.innerHTML = `<strong>${context} Applied To</strong><hr/><pre><code class="language-markup">${escapeHTML(
+      elementHTML
+    )}</code></pre>
     `;
-    
+
     // Apply Prism.js highlighting
     Prism.highlightAll();
     popupContainer.style.display = "block";
-
     setTimeout(() => {
       console.log("Hiding popup");
       popupContainer.style.display = "none";
-    }, 800000);
+    }, 8000);
   } else {
     console.warn("No HTML element passed to showPopup.");
   }
@@ -438,7 +439,6 @@ function resetTypewriterContext() {
     livePreviewElement.contentDocument ||
     livePreviewElement.contentWindow.document;
 
-  
   const existingDynamicStyle = iframeDoc.querySelector("style.dynamic-style");
   if (existingDynamicStyle) {
     existingDynamicStyle.remove();
@@ -698,7 +698,7 @@ document.addEventListener("dblclick", function () {
 document.querySelector(".showElements").addEventListener("change", function () {
   if (this.checked) {
     showAlert("Elements previewing enabled", "success");
-  } else{
+  } else {
     showAlert("Elements previewing disabled", "info");
   }
 });
